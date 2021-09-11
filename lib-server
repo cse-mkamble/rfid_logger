@@ -1,0 +1,10 @@
+
+# Server Liberies
+
+npm install express
+npm install mysql
+npm install cors
+npm install dotenv
+
+npm install concurrently --save
+npm install --save-dev nodemon
