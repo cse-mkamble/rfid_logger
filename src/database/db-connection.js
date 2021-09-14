@@ -1,10 +1,9 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const mysql2 = require('mysql');
+require("dotenv").config();
+const mysql = require('mysql2');
 
 class databaseConnection {
     constructor() {
-        this.db = mysql2.createPool({
+        this.db = mysql.createPool({
             host: process.env.DATABASEHOST,
             user: process.env.DATABASEUSER,
             password: process.env.DATABASEPASSWORD,

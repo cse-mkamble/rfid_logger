@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS user;
 
 CREATE TABLE IF NOT EXISTS user 
   ( 
-     id         INT PRIMARY KEY auto_increment, 
+     id         BIGINT(32) unsigned NOT NULL AUTO_INCREMENu, 
      username   VARCHAR(25) UNIQUE NOT NULL, 
      password   CHAR(60) NOT NULL, 
      first_name VARCHAR(50) NOT NULL, 
@@ -15,3 +15,5 @@ CREATE TABLE IF NOT EXISTS user
      role       ENUM('Admin', 'SuperUser') DEFAULT 'SuperUser', 
      age        INT(11) DEFAULT 0 
   ); 
+
+-- alter table user modify id bigint(20) unsigned NOT NULL AUTO_INCREMENT

@@ -3,7 +3,7 @@
 
 npm install express
 npm install express-validator
-npm install mysql
+npm install mysql2
 npm install cors
 npm install dotenv
 npm install bcryptjs
