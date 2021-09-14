@@ -16,7 +16,10 @@ app.use(cors());
 // Enable pre-flight
 app.options("*", cors());
 
-const server = require('https').Server(app)
+// Simple Route
+app.use(`/`, (req, res) => {
+    res.send("🚀🚀 Server is running 🔥");
+});
 
 // Routes
 app.use(`/api/v1/users`, userRouter);
@@ -33,5 +36,5 @@ app.use(errorMiddleware);
 // Run Server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-    console.log("🚀🚀 Server is running on 🔥", PORT);
+    console.log("🚀🚀 Server is running 🔥 on", PORT);
 });
