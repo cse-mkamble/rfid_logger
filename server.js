@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const HttpException = require('./src/utils/HttpExceptionUtils');
 const errorMiddleware = require('./src/middleware/errorMiddleware');
-const userRouter = require('./src/routes/userRoute');
 
 // Init express
 const app = express();
@@ -17,12 +16,13 @@ app.use(cors());
 app.options("*", cors());
 
 // Simple Route
-app.use(`/`, (req, res) => {
-    res.send("🚀🚀 Server is running 🔥");
-});
+// app.use(`/`, (req, res) => {
+//     res.send("🚀🚀 Server is running 🔥");
+// });
 
 // Routes
-app.use(`/api/v1/users`, userRouter);
+app.use(`/api/v1/users`, require('./src/routes/userRoute'));
+app.use(`/api/v1/school`, require('./src/routes/schoolAuthRoute'));
 
 // 404 error
 app.all('*', (req, res, next) => {
