@@ -71,6 +71,20 @@ exports.createSchoolAuthSchema = [
 
 ];
 
+exports.validateSignin = [
+    body('school_email')
+        .exists()
+        .withMessage('Email is required')
+        .isEmail()
+        .withMessage('Must be a valid email')
+        .normalizeEmail(),
+    body('password')
+        .exists()
+        .withMessage('Password is required')
+        .notEmpty()
+        .withMessage('Password must be filled')
+];
+
 // exports.updateUserSchema = [
 //     body('username')
 //         .optional()
@@ -126,17 +140,3 @@ exports.createSchoolAuthSchema = [
 //         })
 //         .withMessage('Invalid updates!')
 // ];
-
-exports.validateLogin = [
-    body('email')
-        .exists()
-        .withMessage('Email is required')
-        .isEmail()
-        .withMessage('Must be a valid email')
-        .normalizeEmail(),
-    body('password')
-        .exists()
-        .withMessage('Password is required')
-        .notEmpty()
-        .withMessage('Password must be filled')
-];

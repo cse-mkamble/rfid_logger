@@ -5,17 +5,17 @@ const auth = require('../middleware/authMiddleware');
 const Status = require('../utils/schoolAuthStatusUtils');
 const awaitHandlerFactory = require('../middleware/awaitHandlerFactoryMiddleware');
 
-const { createSchoolAuthSchema, updateUserSchema, validateLogin } = require('../middleware/validators/schoolAuthValidatorMiddleware');
+const { createSchoolAuthSchema, updateUserSchema, validateSignin } = require('../middleware/validators/schoolAuthValidatorMiddleware');
 
-// router.get('/', auth(), awaitHandlerFactory(schoolAuthController.getAllUsers)); // localhost:8000/api/v1/users
-// router.get('/id/:id', auth(), awaitHandlerFactory(schoolAuthController.getUserById)); // localhost:8000/api/v1/users/id/1
-// router.get('/username/:username', auth(), awaitHandlerFactory(schoolAuthController.getUserByuserName)); // localhost:8000/api/v1/users/usersname/julia
-// router.get('/myprofile', auth(), awaitHandlerFactory(schoolAuthController.getCurrentUser)); // localhost:8000/api/v1/users/myprofile
-router.post('/', createSchoolAuthSchema, awaitHandlerFactory(schoolAuthController.store)); // localhost:8000/api/v1/users
-// router.patch('/id/:id', auth(Role.Admin), updateUserSchema, awaitHandlerFactory(schoolAuthController.updateUser)); // localhost:8000/api/v1/users/id/1 , using patch for partial update
-// router.delete('/id/:id', auth(Role.Admin), awaitHandlerFactory(schoolAuthController.deleteUser)); // localhost:8000/api/v1/users/id/1
+// school Route
+router.post('/signup', createSchoolAuthSchema, awaitHandlerFactory(schoolAuthController.signup)); // localhost:8000/api/v1/school/signup
+router.post('/signin', validateSignin, awaitHandlerFactory(schoolAuthController.signin)); // localhost:8000/api/v1/school/signin
 
-
-// router.post('/login', validateLogin, awaitHandlerFactory(schoolAuthController.userLogin)); // localhost:8000/api/v1/users/login
+// router.get('/', auth(), awaitHandlerFactory(schoolAuthController.getAllUsers)); // localhost:8000/api/v1/school
+// router.get('/id/:id', auth(), awaitHandlerFactory(schoolAuthController.getUserById)); // localhost:8000/api/v1/school/id/1
+// router.get('/username/:username', auth(), awaitHandlerFactory(schoolAuthController.getUserByuserName)); // localhost:8000/api/v1/school/schoolname/julia
+// router.get('/myprofile', auth(), awaitHandlerFactory(schoolAuthController.getCurrentUser)); // localhost:8000/api/v1/school/myprofile
+// router.patch('/id/:id', auth(Role.Admin), updateUserSchema, awaitHandlerFactory(schoolAuthController.updateUser)); // localhost:8000/api/v1/school/id/1 , using patch for partial update
+// router.delete('/id/:id', auth(Role.Admin), awaitHandlerFactory(schoolAuthController.deleteUser)); // localhost:8000/api/v1/school/id/1
 
 module.exports = router;
