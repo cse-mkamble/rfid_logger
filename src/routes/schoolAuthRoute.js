@@ -9,6 +9,7 @@ const { createSchoolAuthSchema, updateUserSchema, validateSignin } = require('..
 
 // school Route
 router.post('/signup', createSchoolAuthSchema, awaitHandlerFactory(schoolAuthController.signup)); // localhost:8000/api/v1/school/signup
+router.post('/activation', createSchoolAuthSchema, awaitHandlerFactory(schoolAuthController.activation)); // localhost:8000/api/v1/school/activation
 router.post('/signin', validateSignin, awaitHandlerFactory(schoolAuthController.signin)); // localhost:8000/api/v1/school/signin
 
 // router.get('/', auth(), awaitHandlerFactory(schoolAuthController.getAllUsers)); // localhost:8000/api/v1/school

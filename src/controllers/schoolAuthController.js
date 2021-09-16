@@ -13,9 +13,6 @@ class authController {
     signup = async (request, response) => {
         this.checkValidation(request);
         await this.hashPassword(request);
-        // const result = await schoolModel.create(request.body);
-        // if (!result) throw new HttpException(500, 'Something went wrong');
-        // response.status(201).send('School Authentiction was created!');
         const newSchoolAuth = request.body;
         const activation_token = this.createActivationToken(newSchoolAuth);
         const url = `${CLIENT_URL}/v1/security/key/school/activation/${activation_token}`;
@@ -23,6 +20,15 @@ class authController {
         const subjectMail = 'Verified Email Address'
         sendMail({ to: request.body.owner_email, subject: subjectMail, text: message });
         response.status(201).send('Check your email, verify to activation start.');
+    }
+
+    activation = async (request, response) => {
+        const { activation_token } = request.body
+        const school = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN_SECRET)
+        if (!school) return res.status(400).json({ msg: "This school not exists." })
+        const result = await schoolModel.create(school);
+        if (!result) throw new HttpException(500, 'Something went wrong');
+        response.status(201).send('School Authentiction was created!');
     }
 
     signin = async (request, response, next) => {
