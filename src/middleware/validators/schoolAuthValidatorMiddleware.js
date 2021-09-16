@@ -24,12 +24,6 @@ exports.createSchoolAuthSchema = [
         .exists()
         .withMessage('School name is required')
         .notEmpty(),
-    body('school_email')
-        .exists()
-        .withMessage('Your Email is required')
-        .isEmail()
-        .withMessage('Must be a valid email')
-        .normalizeEmail(),
     body('school_phone')
         .exists()
         .withMessage('School phone number is required')
@@ -72,12 +66,12 @@ exports.createSchoolAuthSchema = [
 ];
 
 exports.validateSignin = [
-    body('school_email')
+    body('school_phone')
         .exists()
-        .withMessage('Email is required')
-        .isEmail()
-        .withMessage('Must be a valid email')
-        .normalizeEmail(),
+        .withMessage('School phone number is required')
+        .notEmpty()
+        .isLength({ min: 10 })
+        .withMessage('Must be at least 10 chars long'),
     body('password')
         .exists()
         .withMessage('Password is required')

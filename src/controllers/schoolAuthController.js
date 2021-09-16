@@ -21,15 +21,15 @@ class authController {
         const url = `${CLIENT_URL}/v1/security/key/school/activation/${activation_token}`;
         const message = authActivationMail(request.body.school_name, url, CONTACT_US);
         const subjectMail = 'Verified Email Address'
-        sendMail({ to: request.body.school_email, subject: subjectMail, text: message });
+        sendMail({ to: request.body.owner_email, subject: subjectMail, text: message });
         response.status(201).send('Check your email, verify to activation start.');
     }
 
     signin = async (request, response, next) => {
         this.checkValidation(request);
-        const { school_email, password: pass } = request.body;
-        const school = await schoolModel.findOne({ school_email });
-        if (!school) throw new HttpException(401, 'Incorrect email, Unable to login!');
+        const { school_phone, password: pass } = request.body;
+        const school = await schoolModel.findOne({ school_phone });
+        if (!school) throw new HttpException(401, 'Incorrect school phone, Unable to login!');
         const isMatch = await bcrypt.compare(pass, school.password);
         if (!isMatch) throw new HttpException(401, 'Incorrect password!');
         // school matched!

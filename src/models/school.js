@@ -30,13 +30,11 @@ class UserModel {
         return result[0];
     }
 
-    // create = async ({ username, password, first_name, last_name, email, role = Role.SuperUser, age = 0 }) => {
-    // create = async ({ owner_name, email, password, phone, school_name, address, city, state, country }) => {
-    create = async ({ owner_name, owner_email, owner_phone, password, school_name, school_email, school_phone, address, city, state, country }) => {
+    create = async ({ owner_name, owner_email, owner_phone, password, school_name, school_phone, address, city, state, country }) => {
         const sql = `INSERT INTO ${this.tableName}
-        (owner_name, owner_email, owner_phone, password, school_name, school_email, school_phone, address, city, state, country) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
+        (owner_name, owner_email, owner_phone, password, school_name, school_phone, address, city, state, country) VALUES (?,?,?,?,?,?,?,?,?,?)`;
 
-        const result = await query(sql, [owner_name, owner_email, owner_phone, password, school_name, school_email, school_phone, address, city, state, country]);
+        const result = await query(sql, [owner_name, owner_email, owner_phone, password, school_name, school_phone, address, city, state, country]);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;

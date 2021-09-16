@@ -1,4 +1,3 @@
-require("dotenv").config();
 const nodemailer = require('nodemailer')
 
 const sendMail = (options) => {
@@ -10,7 +9,7 @@ const sendMail = (options) => {
         }
     })
     const mailOptions = {
-        from: '' + process.env.APP_NAME + ' <' + process.env.EMAIL_FROM + '>',
+        from: process.env.APP_NAME + ' <' + process.env.EMAIL_FROM + '>',
         to: options.to,
         subject: options.subject,
         html: options.text,
