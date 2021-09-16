@@ -11,6 +11,7 @@ const { createSchoolAuthSchema, updateUserSchema, validateSignin } = require('..
 router.post('/signup', createSchoolAuthSchema, awaitHandlerFactory(schoolAuthController.signup)); // localhost:8000/api/v1/school/signup
 router.post('/activation', createSchoolAuthSchema, awaitHandlerFactory(schoolAuthController.activation)); // localhost:8000/api/v1/school/activation
 router.post('/signin', validateSignin, awaitHandlerFactory(schoolAuthController.signin)); // localhost:8000/api/v1/school/signin
+router.post('/forgotpassword', awaitHandlerFactory(schoolAuthController.forgotPassword)); // localhost:8000/api/v1/school/forgotpassword
 
 // router.get('/', auth(), awaitHandlerFactory(schoolAuthController.getAllUsers)); // localhost:8000/api/v1/school
 // router.get('/id/:id', auth(), awaitHandlerFactory(schoolAuthController.getUserById)); // localhost:8000/api/v1/school/id/1

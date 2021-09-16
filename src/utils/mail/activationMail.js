@@ -1,4 +1,4 @@
-module.exports = authActivationMail = (name, url, CONTACT_US) => {
+module.exports = activationMail = (name, url, CONTACT_US) => {
     return `
         <div>
             <div style=" background: #005CE4; width:100%;">

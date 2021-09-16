@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const schoolModel = require('../models/school');
 const HttpException = require('../utils/HttpExceptionUtils');
-const authActivationMail = require('../utils/mail/authActivationMail');
+const activationMail = require('../utils/mail/activationMail');
+const forgotPasswordMail = require('../utils/mail/forgotPasswordMail');
 const sendMail = require("../utils/sendMail");
 
 const { CLIENT_URL, CONTACT_US } = process.env
@@ -15,17 +16,17 @@ class authController {
         await this.hashPassword(request);
         const newSchoolAuth = request.body;
         const activation_token = this.createActivationToken(newSchoolAuth);
-        const url = `${CLIENT_URL}/v1/security/key/school/activation/${activation_token}`;
-        const message = authActivationMail(request.body.school_name, url, CONTACT_US);
+        const url = `${CLIENT_URL}/school/activation/${activation_token}`;
+        const message = activationMail(request.body.school_name, url, CONTACT_US);
         const subjectMail = 'Verified Email Address'
         sendMail({ to: request.body.owner_email, subject: subjectMail, text: message });
         response.status(201).send('Check your email, verify to activation start.');
     }
 
     activation = async (request, response) => {
-        const { activation_token } = request.body
-        const school = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN_SECRET)
-        if (!school) return res.status(400).json({ msg: "This school not exists." })
+        const { activation_token } = request.body;
+        const school = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN_SECRET);
+        if (!school) throw new HttpException(401, 'Invalid School.');
         const result = await schoolModel.create(school);
         if (!result) throw new HttpException(500, 'Something went wrong');
         response.status(201).send('School Authentiction was created!');
@@ -45,6 +46,23 @@ class authController {
         response.send({ ...schoolWithoutPassword, token });
     };
 
+    forgotPassword = async (request, response) => {
+        const { school_phone } = request.body;
+        if (!school_phone) throw new HttpException(401, 'Fields must not be empty! school phone');
+        try {
+            const school = await schoolModel.findOne({ school_phone });
+            if (!school) { throw new HttpException(401, 'Invalid School.'); } else {
+                const access_token = this.createAccessToken({ id: school._id, email: school.owner_email });
+                const url = `${CLIENT_URL}/school/resetpassword/${access_token}`;
+                const subjectMail = 'Reset Password';
+                const message = forgotPasswordMail(school.school_name, url, CONTACT_US);
+                sendMail({ to: school.owner_email, subject: subjectMail, text: message });
+                response.status(201).send("Re-send the password, please check your email.");
+            }
+        } catch (error) {
+            throw new HttpException(500, 'Something went wrong');
+        }
+    }
 
     async index(request, response) {
         return response.json({})
@@ -78,6 +96,10 @@ class authController {
 
     createActivationToken = (payload) => {
         return jwt.sign(payload, process.env.ACTIVATION_TOKEN_SECRET, { expiresIn: '5m' })
+    }
+
+    createAccessToken = (payload) => {
+        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' })
     }
 
 }
