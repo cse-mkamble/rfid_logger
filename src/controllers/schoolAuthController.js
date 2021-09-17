@@ -97,16 +97,20 @@ class authController {
     updateSchoolUser = async (request, response, next) => {
         this.checkValidation(request);
         process.env.OTP_VERIFY = Math.random().toString().substr(2, 6)
+        // try {
+        const message = updateSchoolAuthMail(request.currentSchool.school_name, process.env.OTP_VERIFY, Date.now());
+        const subjectMail = 'Update Details'
+        sendMail({ to: request.body.owner_email, subject: subjectMail, text: message });
+        response.status(201).send('Check your email, verify OTP Code to updated details.');
+        // } catch (error) {
+        //     throw new HttpException(500, 'Something went wrong');
+        // }
+    }
+
+    updateSchoolUserOtpVerify = async (request, response, next) => {
+        this.checkValidation(request);
+        console.log(request.body.code)
         console.log(process.env.OTP_VERIFY)
-        // // try {
-        // // const newUpdateDetails = request.currentSchool;
-        // const message = updateSchoolAuthMail(request.body.currentSchool.school_name, OTP_VERIFY, CONTACT_US, Date.now());
-        // const subjectMail = 'Update Details'
-        // sendMail({ to: request.body.owner_email, subject: subjectMail, text: message });
-        // response.status(201).send('Check your email, verify to activation start.');
-        // // } catch (error) {
-        // //     throw new HttpException(500, 'Something went wrong');
-        // // }
     }
 
     updateSchoolUserActivation = async (request, response, next) => {

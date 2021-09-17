@@ -16,6 +16,7 @@ router.post('/forgotpassword', awaitHandlerFactory(schoolAuthController.forgotPa
 router.patch('/resetpassword', auth(), updateSchoolAuthPasswordSchema, awaitHandlerFactory(schoolAuthController.resetPassword)); // localhost:8000/api/v1/school/resetpassword
 router.get('/infor', auth(), awaitHandlerFactory(schoolAuthController.getCurrentSchoolUser)); // localhost:8000/api/v1/school/infor
 router.patch('/update', auth(), validateOwnerEmail, awaitHandlerFactory(schoolAuthController.updateSchoolUser)); // localhost:8000/api/v1/school/update , using patch for partial update
+router.post('/update/otp_verify', auth(), awaitHandlerFactory(schoolAuthController.updateSchoolUserOtpVerify)); // localhost:8000/api/v1/school/update/otp_verify
 
 // router.get('/', auth(), awaitHandlerFactory(schoolAuthController.getAllUsers)); // localhost:8000/api/v1/school
 // router.get('/id/:id', auth(), awaitHandlerFactory(schoolAuthController.getUserById)); // localhost:8000/api/v1/school/id/1
