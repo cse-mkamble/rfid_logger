@@ -14,6 +14,7 @@ router.post('/activation', createSchoolAuthSchema, awaitHandlerFactory(schoolAut
 router.post('/signin', validateSignin, awaitHandlerFactory(schoolAuthController.signin)); // localhost:8000/api/v1/school/signin
 router.post('/forgotpassword', awaitHandlerFactory(schoolAuthController.forgotPassword)); // localhost:8000/api/v1/school/forgotpassword
 router.patch('/resetpassword', auth(), updateSchoolAuthPasswordSchema, awaitHandlerFactory(schoolAuthController.resetPassword)); // localhost:8000/api/v1/school/resetpassword
+router.get('/infor', auth(), awaitHandlerFactory(schoolAuthController.getCurrentSchoolUser)); // localhost:8000/api/v1/school/infor
 
 // router.get('/', auth(), awaitHandlerFactory(schoolAuthController.getAllUsers)); // localhost:8000/api/v1/school
 // router.get('/id/:id', auth(), awaitHandlerFactory(schoolAuthController.getUserById)); // localhost:8000/api/v1/school/id/1

@@ -87,21 +87,11 @@ class authController {
         }
     }
 
-    async index(request, response) {
-        return response.json({})
-    }
 
-    async show(request, response) {
-        return response.json({})
-    }
-
-    async update(request, response) {
-        return response.json({})
-    }
-
-    async delete(request, response) {
-        return response.json({})
-    }
+    getCurrentSchoolUser = async (request, response, next) => {
+        const { password, ...userWithoutPassword } = request.currentSchool;
+        response.send(userWithoutPassword);
+    };
 
     checkValidation = (request) => {
         const errors = validationResult(request)
