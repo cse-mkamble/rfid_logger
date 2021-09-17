@@ -5,6 +5,7 @@ const schoolModel = require('../models/school');
 const HttpException = require('../utils/HttpExceptionUtils');
 const activationMail = require('../utils/mail/activationMail');
 const forgotPasswordMail = require('../utils/mail/forgotPasswordMail');
+const resetPasswordMail = require('../utils/mail/resetPasswordMail');
 const sendMail = require("../utils/sendMail");
 
 const { CLIENT_URL, CONTACT_US } = process.env
@@ -17,7 +18,7 @@ class authController {
         const newSchoolAuth = request.body;
         const activation_token = this.createActivationToken(newSchoolAuth);
         const url = `${CLIENT_URL}/school/activation/${activation_token}`;
-        const message = activationMail(request.body.school_name, url, CONTACT_US);
+        const message = activationMail(request.body.school_name, url, CONTACT_US, Date.now());
         const subjectMail = 'Verified Email Address'
         sendMail({ to: request.body.owner_email, subject: subjectMail, text: message });
         response.status(201).send('Check your email, verify to activation start.');
@@ -52,13 +53,35 @@ class authController {
         try {
             const school = await schoolModel.findOne({ school_phone });
             if (!school) { throw new HttpException(401, 'Invalid School.'); } else {
-                const access_token = this.createAccessToken({ id: school._id, email: school.owner_email });
-                const url = `${CLIENT_URL}/school/resetpassword/${access_token}`;
+                const access_token = jwt.sign({ school_id: school._id.toString(), email: school.owner_email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
+                const url = `${CLIENT_URL}/school/resetpassword/${school._id.toString()}/${access_token}`;
                 const subjectMail = 'Reset Password';
-                const message = forgotPasswordMail(school.school_name, url, CONTACT_US);
+                const message = forgotPasswordMail(school.school_name, url, CONTACT_US, Date.now());
                 sendMail({ to: school.owner_email, subject: subjectMail, text: message });
                 response.status(201).send("Re-send the password, please check your email.");
             }
+        } catch (error) {
+            throw new HttpException(500, 'Something went wrong');
+        }
+    }
+
+    resetPassword = async (request, response) => {
+        this.checkValidation(request);
+        try {
+            await this.hashPassword(request);
+            const { confirm_password, ...restOfUpdates } = request.body;
+            const result = await schoolModel.update(restOfUpdates, request.currentSchool._id);
+            if (!result) throw new HttpException(404, 'Something went wrong');
+            const { affectedRows, changedRows, info } = result;
+            const message = !affectedRows ? 'School User not found' :
+                affectedRows && changedRows ? 'School User Password updated successfully' : 'Updated faild';
+            response.send({ message, info });
+
+            const url = `${CLIENT_URL}/`
+            const subjectMail = 'Reset Password';
+            const mailMessage = resetPasswordMail(url)
+            sendMail({ to: request.currentSchool.owner_email, subject: subjectMail, text: mailMessage })
+
         } catch (error) {
             throw new HttpException(500, 'Something went wrong');
         }

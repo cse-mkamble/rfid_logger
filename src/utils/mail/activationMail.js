@@ -1,4 +1,4 @@
-module.exports = activationMail = (name, url, CONTACT_US) => {
+module.exports = activationMail = (name, url, CONTACT_US, date) => {
     return `
         <div>
             <div style=" background: #005CE4; width:100%;">
@@ -54,6 +54,11 @@ module.exports = activationMail = (name, url, CONTACT_US) => {
                                             <br>
                                             If you encounter any problem, please contact us at<div> ${CONTACT_US}</div>
                                         </div>
+                                        <br/>
+                                        <div style="text-align: end;">
+                                            ${date}
+                                        </div>
+                                        <br/>
                                     </div>
                                 </div>
                             </div>

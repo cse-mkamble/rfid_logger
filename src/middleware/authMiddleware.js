@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const HttpException = require('../utils/HttpExceptionUtils');
-const UserModel = require('../models/userModel');
+const schoolModel = require('../models/school');
 
 const auth = (...roles) => {
     return async function (req, res, next) {
@@ -17,24 +17,24 @@ const auth = (...roles) => {
 
             // Verify Token
             const decoded = jwt.verify(token, secretKey);
-            const user = await UserModel.findOne({ id: decoded.user_id });
+            const school = await schoolModel.findOne({ _id: decoded.school_id });
 
-            if (!user) {
+            if (!school) {
                 throw new HttpException(401, 'Authentication failed!');
             }
 
             // check if the current user is the owner user
-            const ownerAuthorized = req.params.id == user.id;
+            const ownerAuthorized = req.params.id == school._id;
 
-            // if the current user is not the owner and
-            // if the user role don't have the permission to do this action.
-            // the user will get this error
-            if (!ownerAuthorized && roles.length && !roles.includes(user.role)) {
+            // if the current school is not the owner and
+            // if the school role don't have the permission to do this action.
+            // the school will get this error
+            if (!ownerAuthorized && roles.length && !roles.includes(school.role)) {
                 throw new HttpException(401, 'Unauthorized');
             }
 
-            // if the user has permissions
-            req.currentUser = user;
+            // if the school has permissions
+            req.currentSchool = school;
             next();
 
         } catch (e) {

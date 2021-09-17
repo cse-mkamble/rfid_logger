@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS school
      state        VARCHAR(227) NOT NULL, 
      country      VARCHAR(25) NOT NULL, 
      status       ENUM('Active', 'InActive') DEFAULT 'Active', 
+     role       ENUM('Admin', 'User') DEFAULT 'User',
      created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
      updated_at   DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   ); 
