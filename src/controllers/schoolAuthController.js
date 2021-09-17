@@ -6,6 +6,7 @@ const HttpException = require('../utils/HttpExceptionUtils');
 const activationMail = require('../utils/mail/activationMail');
 const forgotPasswordMail = require('../utils/mail/forgotPasswordMail');
 const resetPasswordMail = require('../utils/mail/resetPasswordMail');
+const updateSchoolAuthMail = require('../utils/mail/updateSchoolAuthMail');
 const sendMail = require("../utils/sendMail");
 
 const { CLIENT_URL, CONTACT_US } = process.env
@@ -93,6 +94,38 @@ class authController {
         response.send(userWithoutPassword);
     };
 
+    updateSchoolUser = async (request, response, next) => {
+        this.checkValidation(request);
+        process.env.OTP_VERIFY = Math.random().toString().substr(2, 6)
+        console.log(process.env.OTP_VERIFY)
+        // // try {
+        // // const newUpdateDetails = request.currentSchool;
+        // const message = updateSchoolAuthMail(request.body.currentSchool.school_name, OTP_VERIFY, CONTACT_US, Date.now());
+        // const subjectMail = 'Update Details'
+        // sendMail({ to: request.body.owner_email, subject: subjectMail, text: message });
+        // response.status(201).send('Check your email, verify to activation start.');
+        // // } catch (error) {
+        // //     throw new HttpException(500, 'Something went wrong');
+        // // }
+    }
+
+    updateSchoolUserActivation = async (request, response, next) => {
+        this.checkValidation(request);
+        try {
+            const { ...restOfUpdates } = request.body;
+            const result = await schoolModel.update(restOfUpdates, request.currentSchool._id);
+            if (!result) throw new HttpException(404, 'Something went wrong');
+            const { affectedRows, changedRows, info } = result;
+            const message = !affectedRows ? 'School User not found' :
+                affectedRows && changedRows ? 'School User updated successfully' : 'Updated faild';
+            response.send({ message, info });
+            console.log(affectedRows)
+
+        } catch (error) {
+            throw new HttpException(500, 'Something went wrong');
+        }
+    }
+
     checkValidation = (request) => {
         const errors = validationResult(request)
         if (!errors.isEmpty()) {
@@ -108,7 +141,7 @@ class authController {
     }
 
     createActivationToken = (payload) => {
-        return jwt.sign(payload, process.env.ACTIVATION_TOKEN_SECRET, { expiresIn: '5m' })
+        return jwt.sign(payload, process.env.ACTIVATION_TOKEN_SECRET, { expiresIn: '10m' })
     }
 
     createAccessToken = (payload) => {

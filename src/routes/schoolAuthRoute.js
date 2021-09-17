@@ -6,7 +6,7 @@ const Status = require('../utils/schoolAuthStatusUtils');
 const Role = require('../utils/schoolAuthRoleUtils');
 const awaitHandlerFactory = require('../middleware/awaitHandlerFactoryMiddleware');
 
-const { createSchoolAuthSchema, updateSchoolAuthSchema, validateSignin, updateSchoolAuthPasswordSchema } = require('../middleware/validators/schoolAuthValidatorMiddleware');
+const { createSchoolAuthSchema, updateSchoolAuthSchema, validateOwnerEmail, validateSignin, updateSchoolAuthPasswordSchema } = require('../middleware/validators/schoolAuthValidatorMiddleware');
 
 // school User Route
 router.post('/signup', createSchoolAuthSchema, awaitHandlerFactory(schoolAuthController.signup)); // localhost:8000/api/v1/school/signup
@@ -15,6 +15,7 @@ router.post('/signin', validateSignin, awaitHandlerFactory(schoolAuthController.
 router.post('/forgotpassword', awaitHandlerFactory(schoolAuthController.forgotPassword)); // localhost:8000/api/v1/school/forgotpassword
 router.patch('/resetpassword', auth(), updateSchoolAuthPasswordSchema, awaitHandlerFactory(schoolAuthController.resetPassword)); // localhost:8000/api/v1/school/resetpassword
 router.get('/infor', auth(), awaitHandlerFactory(schoolAuthController.getCurrentSchoolUser)); // localhost:8000/api/v1/school/infor
+router.patch('/update', auth(), validateOwnerEmail, awaitHandlerFactory(schoolAuthController.updateSchoolUser)); // localhost:8000/api/v1/school/update , using patch for partial update
 
 // router.get('/', auth(), awaitHandlerFactory(schoolAuthController.getAllUsers)); // localhost:8000/api/v1/school
 // router.get('/id/:id', auth(), awaitHandlerFactory(schoolAuthController.getUserById)); // localhost:8000/api/v1/school/id/1
