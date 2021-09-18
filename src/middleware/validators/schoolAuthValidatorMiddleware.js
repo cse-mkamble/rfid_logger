@@ -105,6 +105,15 @@ exports.updateSchoolAuthPasswordSchema = [
         .withMessage('Invalid updates!')
 ];
 
+exports.validateOwnerEmail = [
+    body('owner_email')
+        .exists()
+        .withMessage('Your Email is required')
+        .isEmail()
+        .withMessage('Must be a valid email')
+        .normalizeEmail()
+];
+
 exports.updateSchoolAuthSchema = [
     body('owner_name')
         .exists()
@@ -154,13 +163,4 @@ exports.updateSchoolAuthSchema = [
             return updates.every(update => allowUpdates.includes(update));
         })
         .withMessage('Invalid updates!')
-];
-
-exports.validateOwnerEmail = [
-    body('owner_email')
-        .exists()
-        .withMessage('Your Email is required')
-        .isEmail()
-        .withMessage('Must be a valid email')
-        .normalizeEmail()
 ];

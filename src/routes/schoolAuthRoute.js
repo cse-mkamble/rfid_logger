@@ -15,8 +15,9 @@ router.post('/signin', validateSignin, awaitHandlerFactory(schoolAuthController.
 router.post('/forgotpassword', awaitHandlerFactory(schoolAuthController.forgotPassword)); // localhost:8000/api/v1/school/forgotpassword
 router.patch('/resetpassword', auth(), updateSchoolAuthPasswordSchema, awaitHandlerFactory(schoolAuthController.resetPassword)); // localhost:8000/api/v1/school/resetpassword
 router.get('/infor', auth(), awaitHandlerFactory(schoolAuthController.getCurrentSchoolUser)); // localhost:8000/api/v1/school/infor
-router.patch('/update', auth(), validateOwnerEmail, awaitHandlerFactory(schoolAuthController.updateSchoolUser)); // localhost:8000/api/v1/school/update , using patch for partial update
+router.patch('/update/otp_send', auth(), validateOwnerEmail, awaitHandlerFactory(schoolAuthController.updateSchoolUserOtpSend)); // localhost:8000/api/v1/school/update , using patch for partial update
 router.post('/update/otp_verify', auth(), awaitHandlerFactory(schoolAuthController.updateSchoolUserOtpVerify)); // localhost:8000/api/v1/school/update/otp_verify
+router.put('/update/details', auth(), updateSchoolAuthSchema, awaitHandlerFactory(schoolAuthController.updateSchoolUserActivation)); // localhost:8000/api/v1/school/update/details
 
 // router.get('/', auth(), awaitHandlerFactory(schoolAuthController.getAllUsers)); // localhost:8000/api/v1/school
 // router.get('/id/:id', auth(), awaitHandlerFactory(schoolAuthController.getUserById)); // localhost:8000/api/v1/school/id/1

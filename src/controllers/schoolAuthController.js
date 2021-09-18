@@ -94,7 +94,7 @@ class authController {
         response.send(userWithoutPassword);
     };
 
-    updateSchoolUser = async (request, response, next) => {
+    updateSchoolUserOtpSend = async (request, response, next) => {
         this.checkValidation(request);
         process.env.OTP_VERIFY = Math.random().toString().substr(2, 6)
         // try {
@@ -109,8 +109,11 @@ class authController {
 
     updateSchoolUserOtpVerify = async (request, response, next) => {
         this.checkValidation(request);
-        console.log(request.body.code)
-        console.log(process.env.OTP_VERIFY)
+        if (request.body.code == process.env.OTP_VERIFY) {
+            response.send({ success: true });
+        } else {
+            response.send({ success: false });
+        }
     }
 
     updateSchoolUserActivation = async (request, response, next) => {
@@ -123,8 +126,6 @@ class authController {
             const message = !affectedRows ? 'School User not found' :
                 affectedRows && changedRows ? 'School User updated successfully' : 'Updated faild';
             response.send({ message, info });
-            console.log(affectedRows)
-
         } catch (error) {
             throw new HttpException(500, 'Something went wrong');
         }
