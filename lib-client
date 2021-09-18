@@ -1,2 +1,15 @@
 
-# npx create-react-app client --template typescript
+# npx create-react-app client
+
+cd client
+
+npm install --save axios
+npm install --save bootstrap
+npm install --save react-bootstrap
+npm install --save react-dom
+npm install --save react-redux
+npm install --save react-router-dom
+npm install --save redux-devtools-extension
+npm install --save redux-thunk
+npm install @material-ui/core
+
