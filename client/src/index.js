@@ -1,10 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Window from './Window';
+import { Provider } from 'react-redux';
+
+import Routes from "./route";
+import store from "./redux/store";
+
+window.store = store;
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Window />
-  </React.StrictMode>,
-  document.getElementById('window')
-)
+  <Provider store={store}>
+    <React.StrictMode>
+      <Routes />
+    </React.StrictMode>
+  </Provider>,
+  document.getElementById('main')
+);

@@ -12,4 +12,5 @@ npm install --save react-router-dom
 npm install --save redux-devtools-extension
 npm install --save redux-thunk
 npm install @material-ui/core
+npm install aos --save
 
