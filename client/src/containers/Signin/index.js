@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
@@ -10,12 +12,12 @@ const Signin = () => {
 
     AOS.init({})
 
-    const [loginId, setLoginId] = useState('');
+    const [schoolPhone, setSchoolPhone] = useState('');
     const [password, setPassword] = useState('');
 
     const schoolUserSignin = (e) => {
         e.preventDefault()
-        const user = { loginId, password }
+        const user = { schoolPhone, password }
         // dispatch(login(user))
     }
 
@@ -47,33 +49,53 @@ const Signin = () => {
                                             <h3>Signin</h3>
                                         </div>
                                         <Form onSubmit={schoolUserSignin}>
-                                            <Input
-                                                label="Login ID"
-                                                placeholder="Login ID"
-                                                value={loginId}
-                                                type="text"
-                                                onChange={(e) => setLoginId(e.target.value)}
-                                            />
-                                            <Input
-                                                label="Password"
-                                                placeholder="Password"
-                                                value={password}
-                                                type="password"
-                                                onChange={(e) => setPassword(e.target.value)}
-                                            />
-                                            <div style={{
-                                                textAlign: 'end',
-                                                marginBottom: '20px'
-                                            }}><Link>Forgot Password</Link></div>
-                                            <Button variant="primary" type="submit" style={{ width: '100%' }}>
-                                                Login
-                                            </Button>
-                                            <div style={{
-                                                marginTop: '40px',
-                                                textAlign: 'center'
-                                            }}>
-                                                Not a member? <Link to='/signup'>Signup now</Link>
-                                            </div>
+
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ marginBottom: '10px' }}>
+                                                        <label>School Phone Number</label>
+                                                        <PhoneInput
+                                                            country={'in'}
+                                                            className='form-control'
+                                                            value={schoolPhone}
+                                                            onChange={setSchoolPhone}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            </Row>
+
+
+                                            <Row>
+                                                <Col>
+                                                    <Input
+                                                        label="Password"
+                                                        placeholder="Password"
+                                                        value={password}
+                                                        type="password"
+                                                        onChange={(e) => setPassword(e.target.value)}
+                                                    />
+                                                </Col>
+                                            </Row>
+
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ textAlign: 'end', marginBottom: '20px' }}><Link>Forgot Password</Link></div>
+                                                </Col>
+                                            </Row>
+
+                                            <Row>
+                                                <Col>
+                                                    <Button variant="primary" type="submit" style={{ width: '100%' }}> Login </Button>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ marginTop: '40px', textAlign: 'center' }}>
+                                                        Not a member? <Link to='/signup'>Signup now</Link>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+
                                         </Form>
                                     </Col>
                                 </Row>

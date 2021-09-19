@@ -9,7 +9,7 @@ import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
 import './index.css';
 
-const Signin = () => {
+const Signup = () => {
 
     AOS.init({})
 
@@ -192,16 +192,19 @@ const Signin = () => {
                                                 </Col>
                                             </Row>
 
-                                            <Button variant="primary" type="submit" style={{ width: '100%' }}>
-                                                Submit
-                                            </Button>
+                                            <Row>
+                                                <Col>
+                                                    <Button variant="primary" type="submit" style={{ width: '100%' }}>Submit</Button>
+                                                </Col>
+                                            </Row>
 
-                                            <div style={{
-                                                marginTop: '40px',
-                                                textAlign: 'center'
-                                            }}>
-                                                Already have an account? <Link to='/signin'>Signin here</Link>
-                                            </div>
+                                            <Row>
+                                                <Col>
+                                                    <div style={{ marginTop: '40px', textAlign: 'center' }}>
+                                                        Already have an account? <Link to='/signin'>Login here</Link>
+                                                    </div>
+                                                </Col>
+                                            </Row>
 
                                         </Form>
                                     </Col>
@@ -215,4 +218,4 @@ const Signin = () => {
     );
 };
 
-export default Signin;
+export default Signup;
