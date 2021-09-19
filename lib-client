@@ -14,3 +14,6 @@ npm install --save redux-thunk
 npm install @material-ui/core
 npm install aos --save
 
+npm install react-country-region-selector
+npm install react-phone-input-2 --save
+

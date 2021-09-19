@@ -72,7 +72,7 @@ const Signin = () => {
                                                 marginTop: '40px',
                                                 textAlign: 'center'
                                             }}>
-                                                Not a member? <Link>Signup now</Link>
+                                                Not a member? <Link to='/signup'>Signup now</Link>
                                             </div>
                                         </Form>
                                     </Col>
