@@ -12,6 +12,7 @@ npm install --save react-router-dom
 npm install --save redux-devtools-extension
 npm install --save redux-thunk
 npm install @material-ui/core
+npm install @material-ui/icons
 npm install aos --save
 
 npm install react-country-region-selector

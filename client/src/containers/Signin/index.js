@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
@@ -12,12 +10,12 @@ const Signin = () => {
 
     AOS.init({})
 
-    const [schoolPhone, setSchoolPhone] = useState('');
+    const [schoolEmail, setSchoolEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const schoolUserSignin = (e) => {
         e.preventDefault()
-        const user = { schoolPhone, password }
+        const user = { schoolEmail, password }
         // dispatch(login(user))
     }
 
@@ -52,15 +50,13 @@ const Signin = () => {
 
                                             <Row>
                                                 <Col>
-                                                    <div style={{ marginBottom: '10px' }}>
-                                                        <label>School Phone Number</label>
-                                                        <PhoneInput
-                                                            country={'in'}
-                                                            className='form-control'
-                                                            value={schoolPhone}
-                                                            onChange={setSchoolPhone}
-                                                        />
-                                                    </div>
+                                                    <Input
+                                                        label="Email"
+                                                        placeholder="Email"
+                                                        value={schoolEmail}
+                                                        type="email"
+                                                        onChange={(e) => setSchoolEmail(e.target.value)}
+                                                    />
                                                 </Col>
                                             </Row>
 

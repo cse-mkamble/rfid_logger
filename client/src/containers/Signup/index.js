@@ -7,16 +7,18 @@ import 'react-phone-input-2/lib/style.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
+import Password from "../../components/UI/Password";
+import ErrorModal from "../../components/ErrorModal";
 import './index.css';
 
 const Signup = () => {
 
     AOS.init({})
 
-    const [ownerName, setOwnerName] = useState('');
-    const [ownerEmail, setOwnerEmail] = useState('');
-    const [ownerPhone, setOwnerPhone] = useState('');
+    const [error, setError] = useState('');
+
     const [schoolName, setSchoolName] = useState('');
+    const [schoolEmail, setSchoolEmail] = useState('');
     const [schoolPhone, setSchoolPhone] = useState('');
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
@@ -27,9 +29,30 @@ const Signup = () => {
 
     const schoolUserSignup = (e) => {
         e.preventDefault()
-        // const user = { loginId, password }
-        // dispatch(login(user))
+        if (validate()) {
+            console.log('yes')
+        }
     }
+
+    const validate = () => {
+        let errors = {};
+        let isValid = true;
+        if (!schoolPhone) {
+            isValid = false;
+            errors["school_phone"] = "Plese fill in Telephone Number filed.";
+            // alert("Plese fill in Telephone Number filed.")
+        }
+        if (password !== "undefined" && confirmPassword !== "undefined") {
+            if (password != confirmPassword) {
+                isValid = false;
+                errors["confirm_password"] = "Confirm Password don't match.";
+                // alert("Confirm Password don't match.")
+            }
+        }
+        setError(errors);
+        return isValid;
+    }
+
 
     return (
         <div>
@@ -52,7 +75,6 @@ const Signup = () => {
                             <Container>
                                 <Row>
                                     <Col>
-
                                         <div style={{
                                             textAlign: 'center',
                                             marginBottom: '20px'
@@ -65,29 +87,9 @@ const Signup = () => {
                                             <Row>
                                                 <Col>
                                                     <Input
-                                                        label="Owner Name"
-                                                        placeholder="Owner Name"
-                                                        value={ownerName}
-                                                        type="text"
-                                                        onChange={(e) => setOwnerName(e.target.value)}
-                                                    />
-                                                </Col>
-                                                <Col>
-                                                    <Input
-                                                        label="Owner Email"
-                                                        placeholder="Owner Email"
-                                                        value={ownerEmail}
-                                                        type="email"
-                                                        onChange={(e) => setOwnerEmail(e.target.value)}
-                                                    />
-                                                </Col>
-                                            </Row>
-
-                                            <Row>
-                                                <Col>
-                                                    <Input
                                                         label="School Name"
                                                         placeholder="School Name"
+                                                        required
                                                         value={schoolName}
                                                         type="text"
                                                         onChange={(e) => setSchoolName(e.target.value)}
@@ -97,25 +99,25 @@ const Signup = () => {
 
                                             <Row>
                                                 <Col>
-                                                    <div style={{ marginBottom: '10px' }}>
-                                                        <label>Owner Phone Number</label>
-                                                        <PhoneInput
-                                                            country={'in'}
-                                                            className='form-control'
-                                                            value={ownerPhone}
-                                                            onChange={setOwnerPhone}
-                                                        />
-                                                    </div>
+                                                    <Input
+                                                        label="Email"
+                                                        placeholder="Email"
+                                                        required
+                                                        value={schoolEmail}
+                                                        type="email"
+                                                        onChange={(e) => setSchoolEmail(e.target.value)}
+                                                    />
                                                 </Col>
                                                 <Col>
                                                     <div style={{ marginBottom: '10px' }}>
-                                                        <label>School Phone Number</label>
+                                                        <label>Telephone Number</label>
                                                         <PhoneInput
                                                             country={'in'}
                                                             className='form-control'
                                                             value={schoolPhone}
                                                             onChange={setSchoolPhone}
                                                         />
+                                                        <div className="text-danger">{error.schoolPhone}</div>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -126,16 +128,18 @@ const Signup = () => {
                                                         <label>Country</label>
                                                         <CountryDropdown
                                                             className='form-control'
+                                                            required
                                                             value={country}
                                                             onChange={(val) => setCountry(val)} />
                                                     </div>
                                                 </Col>
                                                 <Col>
                                                     <div style={{ marginBottom: '10px' }}>
-                                                        <label>State</label>
+                                                        <label>Region (State)</label>
                                                         <RegionDropdown
                                                             className='form-control'
                                                             country={country}
+                                                            required
                                                             value={region}
                                                             onChange={(val) => setRegion(val)} />
                                                     </div>
@@ -147,6 +151,7 @@ const Signup = () => {
                                                     <Input
                                                         label="City"
                                                         placeholder="City"
+                                                        required
                                                         value={city}
                                                         type="text"
                                                         onChange={(e) => setCity(e.target.value)}
@@ -163,6 +168,7 @@ const Signup = () => {
                                                             style={{ resize: 'none' }}
                                                             rows="3"
                                                             placeholder="Address"
+                                                            required
                                                             value={address}
                                                             type="text"
                                                             onChange={(e) => setAddress(e.target.value)}
@@ -173,21 +179,21 @@ const Signup = () => {
 
                                             <Row>
                                                 <Col>
-                                                    <Input
-                                                        label="Password"
-                                                        placeholder="Password"
+                                                    <Password
+                                                        label={"Password"}
+                                                        placeholder={"Password"}
                                                         value={password}
-                                                        type="password"
                                                         onChange={(e) => setPassword(e.target.value)}
+                                                        errorMessage={""}
                                                     />
                                                 </Col>
                                                 <Col>
-                                                    <Input
-                                                        label="Confirm Password"
-                                                        placeholder="Confirm Password"
+                                                    <Password
+                                                        label={"Confirm Password"}
+                                                        placeholder={"Confirm Password"}
                                                         value={confirmPassword}
-                                                        type="password"
                                                         onChange={(e) => setConfirmPassword(e.target.value)}
+                                                        errorMessage={error.confirm_password}
                                                     />
                                                 </Col>
                                             </Row>
