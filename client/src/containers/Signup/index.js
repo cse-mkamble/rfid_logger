@@ -8,14 +8,19 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
 import Password from "../../components/UI/Password";
-import ErrorModal from "../../components/ErrorModal";
+import ErrorDialog from "../../components/ErrorModal";
 import './index.css';
 
 const Signup = () => {
 
     AOS.init({})
 
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState('');
+
+    const [showDialog, setShowDialog] = useState(false);
+    const handleClickOpenShowDialog = () => setShowDialog(true);
+    const handleCloseShowDialog = () => setShowDialog(false);
+
 
     const [schoolName, setSchoolName] = useState('');
     const [schoolEmail, setSchoolEmail] = useState('');
@@ -38,21 +43,19 @@ const Signup = () => {
         let errors = {};
         let isValid = true;
         if (!schoolPhone) {
-            isValid = false;
             errors["school_phone"] = "Plese fill in Telephone Number filed.";
-            // alert("Plese fill in Telephone Number filed.")
+            isValid = false;
         }
         if (password !== "undefined" && confirmPassword !== "undefined") {
             if (password != confirmPassword) {
-                isValid = false;
                 errors["confirm_password"] = "Confirm Password don't match.";
-                // alert("Confirm Password don't match.")
+                isValid = false;
             }
         }
-        setError(errors);
+        setErrors(errors)
+        if (Object.values(errors)[0]) handleClickOpenShowDialog()
         return isValid;
     }
-
 
     return (
         <div>
@@ -117,7 +120,7 @@ const Signup = () => {
                                                             value={schoolPhone}
                                                             onChange={setSchoolPhone}
                                                         />
-                                                        <div className="text-danger">{error.schoolPhone}</div>
+                                                        <div className="text-danger">{errors.school_phone}</div>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -182,6 +185,7 @@ const Signup = () => {
                                                     <Password
                                                         label={"Password"}
                                                         placeholder={"Password"}
+                                                        required
                                                         value={password}
                                                         onChange={(e) => setPassword(e.target.value)}
                                                         errorMessage={""}
@@ -191,9 +195,10 @@ const Signup = () => {
                                                     <Password
                                                         label={"Confirm Password"}
                                                         placeholder={"Confirm Password"}
+                                                        required
                                                         value={confirmPassword}
                                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                                        errorMessage={error.confirm_password}
+                                                        errorMessage={errors.confirm_password}
                                                     />
                                                 </Col>
                                             </Row>
@@ -220,6 +225,14 @@ const Signup = () => {
                     </div>
                 </div>
             </div>
+
+            <ErrorDialog
+                show={showDialog}
+                handleClose={handleCloseShowDialog}
+                title={"Error"}
+                text={Object.values(errors)[0]}
+            />
+
         </div>
     );
 };

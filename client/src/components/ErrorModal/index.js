@@ -1,26 +1,33 @@
-import React, { useState } from 'react';
-import { Button, Modal } from "react-bootstrap";
+import React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
-const ErrorModal = ({ error }) => {
-
-    const [show, setShow] = useState(true);
-    const handleClose = () => setShow(false);
+const ErrorDialog = (props) => {
 
     return (
-        <Modal show={show} onHide={handleClose}>
-
-            <Modal.Header closeButton>
-                <Modal.Title>Error</Modal.Title>
-            </Modal.Header>
-
-            <Modal.Body>{error}</Modal.Body>
-
-            <Modal.Footer>
-                <Button variant="primary" onClick={handleClose}>close</Button>
-            </Modal.Footer>
-
-        </Modal>
+        <div>
+            <Dialog
+                open={props.show}
+                onClose={props.handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {props.title}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">{props.text}</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={props.handleClose}>Close</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
     );
-};
+}
 
-export default ErrorModal;
+export default ErrorDialog;
