@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
@@ -9,6 +10,7 @@ import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
 import Password from "../../components/UI/Password";
 import ErrorDialog from "../../components/ErrorModal";
+import { signupSchoolAuth } from "../../redux/actions";
 import './index.css';
 
 const Signup = () => {
@@ -32,10 +34,13 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const dispatch = useDispatch();
+
     const schoolUserSignup = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         if (validate()) {
-            console.log('yes')
+            const user = { schoolName, schoolEmail, schoolPhone, address, city, region, country, password, confirmPassword };
+            dispatch(signupSchoolAuth(user));
         }
     }
 

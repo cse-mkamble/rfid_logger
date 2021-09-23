@@ -3,35 +3,39 @@ const Role = require('../../utils/userRolesUtils');
 
 
 exports.createUserSchema = [
-    body('username')
-        .exists()
-        .withMessage('username is required')
-        .isLength({ min: 3 })
-        .withMessage('Must be at least 3 chars long'),
-    body('first_name')
+    body('school_name')
         .exists()
         .withMessage('Your first name is required')
         .isAlpha()
         .withMessage('Must be only alphabetical chars')
         .isLength({ min: 3 })
         .withMessage('Must be at least 3 chars long'),
-    body('last_name')
-        .exists()
-        .withMessage('Your last name is required')
-        .isAlpha()
-        .withMessage('Must be only alphabetical chars')
-        .isLength({ min: 3 })
-        .withMessage('Must be at least 3 chars long'),
-    body('email')
+    body('school_email')
         .exists()
         .withMessage('Email is required')
         .isEmail()
         .withMessage('Must be a valid email')
         .normalizeEmail(),
-    body('role')
-        .optional()
-        .isIn([Role.Admin, Role.SuperUser])
-        .withMessage('Invalid Role type'),
+    body('school_phone')
+        .exists()
+        .withMessage('Phone is required')
+        .isNumeric()
+        .withMessage('Must be a number'),
+    body('address')
+        .exists()
+        .withMessage('Address is required')
+        .notEmpty()
+        .isLength({ min: 6 })
+        .withMessage('Address must contain at least 6 characters'),
+    body('city')
+        .exists()
+        .withMessage('City is required'),
+    body('region')
+        .exists()
+        .withMessage('Region is required'),
+    body('country')
+        .exists()
+        .withMessage('Country is required'),
     body('password')
         .exists()
         .withMessage('Password is required')
@@ -42,12 +46,8 @@ exports.createUserSchema = [
         .withMessage('Password can contain max 10 characters'),
     body('confirm_password')
         .exists()
-        .custom((value, { req }) => value === req.body.password)
+        .custom((value, { req }) => value === req.body.user.password)
         .withMessage('confirm_password field must have the same value as the password field'),
-    body('age')
-        .optional()
-        .isNumeric()
-        .withMessage('Must be a number')
 ];
 
 exports.updateUserSchema = [

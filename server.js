@@ -22,7 +22,6 @@ app.options("*", cors());
 
 // Routes
 app.use(`/api/v1/users`, require('./src/routes/userRoute'));
-app.use(`/api/v1/school`, require('./src/routes/schoolAuthRoute'));
 
 // 404 error
 app.all('*', (req, res, next) => {

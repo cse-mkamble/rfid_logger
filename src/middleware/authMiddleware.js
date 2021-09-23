@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const HttpException = require('../utils/HttpExceptionUtils');
-const schoolModel = require('../models/school');
+const userModel = require('../models/userModel');
 
 const auth = (...roles) => {
     return async function (req, res, next) {
@@ -17,7 +17,7 @@ const auth = (...roles) => {
 
             // Verify Token
             const decoded = jwt.verify(token, secretKey);
-            const school = await schoolModel.findOne({ _id: decoded.school_id });
+            const school = await userModel.findOne({ _id: decoded.school_id });
 
             if (!school) {
                 throw new HttpException(401, 'Authentication failed!');
