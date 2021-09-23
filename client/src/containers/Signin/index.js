@@ -4,6 +4,7 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
+import Password from "../../components/UI/Password";
 import './index.css';
 
 const Signin = () => {
@@ -53,6 +54,7 @@ const Signin = () => {
                                                     <Input
                                                         label="Email"
                                                         placeholder="Email"
+                                                        required
                                                         value={schoolEmail}
                                                         type="email"
                                                         onChange={(e) => setSchoolEmail(e.target.value)}
@@ -63,12 +65,13 @@ const Signin = () => {
 
                                             <Row>
                                                 <Col>
-                                                    <Input
-                                                        label="Password"
-                                                        placeholder="Password"
+                                                    <Password
+                                                        label={"Password"}
+                                                        placeholder={"Password"}
+                                                        required
                                                         value={password}
-                                                        type="password"
                                                         onChange={(e) => setPassword(e.target.value)}
+                                                        errorMessage={""}
                                                     />
                                                 </Col>
                                             </Row>
