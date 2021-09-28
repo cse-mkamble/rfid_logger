@@ -17,24 +17,24 @@ const auth = (...roles) => {
 
             // Verify Token
             const decoded = jwt.verify(token, secretKey);
-            const school = await userModel.findOne({ _id: decoded.school_id });
+            const user = await userModel.findOne({ _id: decoded._id });
 
-            if (!school) {
+            if (!user) {
                 throw new HttpException(401, 'Authentication failed!');
             }
 
             // check if the current user is the owner user
-            const ownerAuthorized = req.params.id == school._id;
+            const ownerAuthorized = req.params.id == user._id;
 
             // if the current school is not the owner and
             // if the school role don't have the permission to do this action.
             // the school will get this error
-            if (!ownerAuthorized && roles.length && !roles.includes(school.role)) {
+            if (!ownerAuthorized && roles.length && !roles.includes(user.role)) {
                 throw new HttpException(401, 'Unauthorized');
             }
 
             // if the school has permissions
-            req.currentSchool = school;
+            req.currentUser = user;
             next();
 
         } catch (e) {

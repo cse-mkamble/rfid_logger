@@ -11,7 +11,7 @@
                     border-radius: 10px;
                     margin: 5px;
                     text-align: center;">
-                        <div>
+                        <div style="min-height: 300px;">
                             <h2>Welcome To School Software</h2>
                             <hr />
                             <h3>${name},</h3>
@@ -43,22 +43,19 @@
                                     <a href=${url}>${url}</a>
                                 </div>
                                 <br>
-                                <div>
-                                    Note: You must perform this validation within the next 10 minute to keep your new
-                                    account enabled.
-                                    <br>
-                                    <br>
-                                    If you encounter any problem, please contact us at<div> ${CONTACT_US}</div>
-                                </div>
-                                <br />
-                                <div style="text-align: end;">
-                                    ${date}
-                                </div>
-                                <br />
+                                <div>Note: You must perform this validation within the next 10 minute to keep your new
+                                    account enabled.</div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <br />
+            <div style="text-align: center; color: white; ">
+                <div>If you encounter any problem, please contact us at <strong>${CONTACT_US}</strong> </div>
+                <br />
+                <div>©2021 ${APP_Name}. All rights reserved.</div>
+                <div style="text-align: end; color: white; margin: 20px 40px 0;">${Date.now()}</div>
             </div>
         </div>
     </div>

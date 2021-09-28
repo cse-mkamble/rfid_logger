@@ -1,17 +1,17 @@
 import { constants } from "../constants"
 
-export const signupSchoolAuthReducer = (state = {}, action) => {
+export const registerUserReducer = (state = {}, action) => {
     switch (action.type) {
-        case constants.SCHOOL_USER_REGISTER_REQUEST:
+        case constants.USER_REGISTER_REQUEST:
             return {
                 loading: true
             }
-        case constants.SCHOOL_USER_REGISTER_SUCCESS:
+        case constants.USER_REGISTER_SUCCESS:
             return {
                 loading: false,
                 success: true
             }
-        case constants.SCHOOL_USER_REGISTER_FAILED:
+        case constants.USER_REGISTER_FAILED:
             return {
                 loading: false,
                 error: action.payload

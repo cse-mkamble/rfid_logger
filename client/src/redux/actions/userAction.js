@@ -1,14 +1,14 @@
 import axios from "axios"
 import { constants } from "../constants"
 
-export const signupSchoolAuth = (user) => async dispatch => {
+export const register = (user) => async dispatch => {
     const { schoolName, schoolEmail, schoolPhone, address, city, region, country, password, confirmPassword } = user
-    dispatch({ type: constants.SCHOOL_USER_REGISTER_REQUEST })
+    dispatch({ type: constants.USER_REGISTER_REQUEST })
     try {
         const response = await axios.post(`/api/v1/users/register`, { school_name: schoolName, school_email: schoolEmail, school_phone: schoolPhone, address, city, region, country, password, confirm_password: confirmPassword })
-        dispatch({ type: constants.SCHOOL_USER_REGISTER_SUCCESS })
+        dispatch({ type: constants.USER_REGISTER_SUCCESS })
     } catch (error) {
-        dispatch({ type: constants.SCHOOL_USER_REGISTER_FAILED, payload: error })
+        dispatch({ type: constants.USER_REGISTER_FAILED, payload: error })
     }
 }
 

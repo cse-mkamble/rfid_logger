@@ -9,6 +9,7 @@ npm install dotenv
 npm install bcryptjs
 npm install jsonwebtoken
 npm install nodemailer
+npm install otplib --save 
 
 npm install concurrently --save
 npm install --save-dev nodemon

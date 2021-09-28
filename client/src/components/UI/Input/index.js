@@ -7,7 +7,7 @@ const Input = (props) => {
   switch (props.type) {
     case 'select':
       input = <Form.Group>
-        {props.label && <Form.Label>{props.label}</Form.Label>}
+        {props.label && <Form.Label style={{ fontWeight: '500', marginLeft: '10px' }}>{props.label}</Form.Label>}
         <select
           className="form-control form-control-sm"
           value={props.value}
@@ -23,11 +23,11 @@ const Input = (props) => {
         </select>
       </Form.Group>
       break;
-    
+
     case 'text':
     default:
       input = <Form.Group>
-        {props.label && <Form.Label>{props.label}</Form.Label>}
+        {props.label && <Form.Label style={{ fontWeight: '500', marginLeft: '10px' }}>{props.label}</Form.Label>}
         <Form.Control
           type={props.type}
           placeholder={props.placeholder}

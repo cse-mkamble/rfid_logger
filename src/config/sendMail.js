@@ -23,4 +23,4 @@ const sendMail = (options) => {
     })
 }
 
-module.exports = sendMail
+module.exports = { sendMail }

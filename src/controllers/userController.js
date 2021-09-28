@@ -8,6 +8,21 @@ const HttpException = require('../utils/HttpExceptionUtils');
  *                              User Controller
  ******************************************************************************/
 class UserController {
+
+    register = async (req, res, next) => {
+        this.checkValidation(req);
+        console.log(req.body)
+        // await this.hashPassword(req);
+        // const result = await UserModel.create(req.body);
+        // if (!result) throw new HttpException(500, 'Something went wrong');
+        // res.status(201).send('User was created!');
+    };
+
+
+
+
+
+
     getAllUsers = async (req, res, next) => {
         let userList = await UserModel.find();
         if (!userList.length) {

@@ -46,7 +46,7 @@ exports.createUserSchema = [
         .withMessage('Password can contain max 10 characters'),
     body('confirm_password')
         .exists()
-        .custom((value, { req }) => value === req.body.user.password)
+        .custom((value, { req }) => value === req.body.password)
         .withMessage('confirm_password field must have the same value as the password field'),
 ];
 

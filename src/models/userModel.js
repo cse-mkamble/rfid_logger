@@ -1,6 +1,6 @@
 const query = require('../database/db-connection');
 const { multipleColumnSet } = require('../utils/commonUtils');
-const Status = require('../utils/schoolAuthStatusUtils');
+const Status = require('../utils/userStatusUtils');
 
 class UserModel {
     tableName = 'school';

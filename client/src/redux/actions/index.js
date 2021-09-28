@@ -1,1 +1,1 @@
-export * from './schoolAuthAction';
+export * from './userAction';

@@ -8,9 +8,7 @@ const awaitHandlerFactory = require('../middleware/awaitHandlerFactoryMiddleware
 const { createUserSchema, updateUserSchema, validateLogin } = require('../middleware/validators/userValidatorMiddleware');
 
 // School User
-router.post('/register', createUserSchema, (req, res) => {
-    console.log(req.body)
-});
+router.post('/register', createUserSchema, awaitHandlerFactory(userController.register));
 
 
 // router.get('/', auth(), awaitHandlerFactory(userController.getAllUsers)); // localhost:8000/api/v1/users
