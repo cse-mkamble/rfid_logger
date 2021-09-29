@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
+import AlertsView from "../components/AlertsView";
 import NavBar from "../components/NavBar";
 import PrivateRoute from "../components/HOC";
 import Home from "../containers/Home";
@@ -9,19 +9,93 @@ import Signup from "../containers/Signup";
 import error404 from "../containers/404";
 import ScrollToTop from "../utils/scrollToTop";
 
-const Routes = () => {
-    return (
-        <Router>
-            <Switch>
+class Routes extends React.Component {
+    state = {
+        successMessages: [],
+        errorMessages: []
+    };
 
-                <Route exact path='/' component={Home} />
+    handleAddErrorMessages = errors => {
+        this.setState({ errorMessages: [...this.state.errorMessages, ...errors] });
+    };
 
-                <Route path='/Signin' component={Signin} />
-                <Route path='/Signup' component={Signup} />
+    handleAddSuccessMessage = successMessage => {
+        this.setState({
+            successMessages: [...this.state.successMessages, { msg: successMessage }]
+        });
+    };
 
-            </Switch>
-        </Router>
-    );
-};
+    handleDismissErrorMessage = index => {
+        const errorMessages = [...this.state.errorMessages];
+        errorMessages.splice(index, 1);
+        this.setState({ errorMessages: [...errorMessages] });
+    };
+
+    handleDismissSuccessMessage = index => {
+        const successMessages = [...this.state.successMessages];
+        successMessages.splice(index, 1);
+        this.setState({ successMessages: [...successMessages] });
+    };
+
+    render() {
+        return (
+            <div>
+                <AlertsView
+                    successMessages={this.state.successMessages}
+                    errorMessages={this.state.errorMessages}
+                    handleDismissSuccessMessage={this.handleDismissSuccessMessage}
+                    handleDismissErrorMessage={this.handleDismissErrorMessage}
+                />
+                <Router>
+                    <Switch>
+                        <Route exact path="/signin">
+                            <Signin
+                                handleAddErrorMessages={this.handleAddErrorMessages}
+                                handleAddSuccessMessage={this.handleAddSuccessMessage}
+                            />
+                        </Route>
+                        <Route exact path="/signup">
+                            <Signup
+                                handleAddErrorMessages={this.handleAddErrorMessages}
+                                handleAddSuccessMessage={this.handleAddSuccessMessage}
+                            />
+                        </Route>
+                        <Route exact path="/">
+                            <Home
+                                handleAddErrorMessages={this.handleAddErrorMessages}
+                                handleAddSuccessMessage={this.handleAddSuccessMessage}
+                            />
+                        </Route>
+                        <Route path="*">
+                            <Signin
+                                handleAddErrorMessages={this.handleAddErrorMessages}
+                                handleAddSuccessMessage={this.handleAddSuccessMessage}
+                            />
+                        </Route>
+                    </Switch>
+                </Router>
+            </div>
+        );
+    }
+}
+
+// export default App;
+
+
+
+// const Routes = () => {
+//     return (
+//         <Router>
+//             <Switch>
+
+//                 <Route exact path='/' component={Home} />
+
+//                 <Route path='/Signin' component={Signin} />
+//                 <Route path='/Signup' component={Signup} />
+
+//             </Switch>
+//         </Router>
+//     );
+// };
 
 export default Routes;

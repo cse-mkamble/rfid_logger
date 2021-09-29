@@ -21,3 +21,5 @@ npm install react-phone-input-2 --save
 npm install @mui/material @emotion/react @emotion/styled
 npm install @mui/material@next @mui/styled-engine-sc@next styled-components
 npm install @mui/icons-material@next
+
+npm install react-bs-notifier

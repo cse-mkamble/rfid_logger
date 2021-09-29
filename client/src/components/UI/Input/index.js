@@ -10,6 +10,7 @@ const Input = (props) => {
         {props.label && <Form.Label style={{ fontWeight: '500', marginLeft: '10px' }}>{props.label}</Form.Label>}
         <select
           className="form-control form-control-sm"
+          name={props.name}
           value={props.value}
           onChange={props.onChange}
         >
@@ -31,6 +32,7 @@ const Input = (props) => {
         <Form.Control
           type={props.type}
           placeholder={props.placeholder}
+          name={props.name}
           value={props.value}
           onChange={props.onChange}
           {...props}

@@ -27,6 +27,7 @@ const Password = (props) => {
                 style={{ border: 'none' }}
                 type="password"
                 placeholder={props.placeholder}
+                name={props.name}
                 value={props.value}
                 onChange={props.onChange}
                 {...props}
@@ -36,6 +37,7 @@ const Password = (props) => {
                 style={{ border: 'none' }}
                 type="text"
                 placeholder={props.placeholder}
+                name={props.name}
                 value={props.value}
                 onChange={props.onChange}
                 {...props}
