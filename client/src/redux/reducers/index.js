@@ -1,7 +1,8 @@
 import { combineReducers } from "redux";
-import { registerUserReducer } from "./userReducer";
+import { registerUserSendMailReducer, registerUserReducer } from "./userReducer";
 
 const rootReducer = combineReducers({
+    registerUserSendMailReducer: registerUserSendMailReducer,
     registerUserReducer: registerUserReducer
 });
 

@@ -1,14 +1,29 @@
 import axios from "axios"
 import { constants } from "../constants"
 
-export const register = (user) => async dispatch => {
-    const { schoolName, schoolEmail, schoolPhone, address, city, region, country, password, confirmPassword } = user
-    dispatch({ type: constants.USER_REGISTER_REQUEST })
-    try {
-        const response = await axios.post(`/api/v1/users/register`, { school_name: schoolName, school_email: schoolEmail, school_phone: schoolPhone, address, city, region, country, password, confirm_password: confirmPassword })
-        dispatch({ type: constants.USER_REGISTER_SUCCESS })
-    } catch (error) {
-        dispatch({ type: constants.USER_REGISTER_FAILED, payload: error })
+export const registerSendMail = (user) => {
+    return dispatch => {
+        dispatch({ type: constants.USER_REGISTER_SEND_MAIL_REQUEST })
+        try {
+            console.log(user)
+            // const response = await axios.post(`/api/v1/users/register`, { school_name: schoolName, school_email: schoolEmail, school_phone: schoolPhone, address, city, region, country, password, confirm_password: confirmPassword })
+            dispatch({ type: constants.USER_REGISTER_SEND_MAIL_SUCCESS })
+        } catch (error) {
+            dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: error })
+        }
+    }
+}
+
+export const register = (user) => {
+    return dispatch => {
+        dispatch({ type: constants.USER_REGISTER_REQUEST })
+        try {
+            console.log(user)
+            // const response = await axios.post(`/api/v1/users/register`, { school_name: schoolName, school_email: schoolEmail, school_phone: schoolPhone, address, city, region, country, password, confirm_password: confirmPassword })
+            dispatch({ type: constants.USER_REGISTER_SUCCESS })
+        } catch (error) {
+            dispatch({ type: constants.USER_REGISTER_FAILED, payload: error })
+        }
     }
 }
 

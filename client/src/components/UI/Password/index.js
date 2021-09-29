@@ -19,7 +19,7 @@ const Password = (props) => {
   return (
     <div>
       <Form.Group>
-        {props.label && <Form.Label style={{ fontWeight: '500', marginLeft: '10px' }}>{props.label}</Form.Label>}
+        {props.label && <Form.Label>{props.label}</Form.Label>}
         <div style={{ display: 'flex', border: '1px solid gray' }} >
           {
             isPassword ? (<div style={{ width: '100%' }}>

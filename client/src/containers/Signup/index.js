@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux';
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 import PhoneInput from 'react-phone-input-2';
@@ -9,23 +10,27 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
 import Password from "../../components/UI/Password";
-
+import { register, registerSendMail } from "../../redux/actions";
+import './index.css';
 
 class Signup extends Component {
-    state = {
-        schoolName: "",
-        schoolEmail: "",
-        schoolPhone: "",
-        address: "",
-        city: "",
-        region: "",
-        country: "",
-        password: "",
-        confirmPassword: "",
-        otp: "",
-        stage: "signup",
-        waiting: false
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            schoolName: "",
+            schoolEmail: "",
+            schoolPhone: "",
+            address: "",
+            city: "",
+            region: "",
+            country: "",
+            password: "",
+            confirmPassword: "",
+            otp: "",
+            stage: "signup",
+            waiting: false
+        }
+    }
 
     componentDidMount() {
         console.log(this.props)
@@ -48,30 +53,16 @@ class Signup extends Component {
             return;
         }
         try {
-            // const response = await axios.post(
-            //     `${process.env.REACT_APP_SERVER_URL}/user/signup`,
-            //     {
-            //         email,
-            //         password
-            //     }
-            // );
-            // this.setState({ waiting: false });
-            // handleAddSuccessMessage(response.data.msg);
+            const user = { schoolName, schoolEmail, schoolPhone, address, city, region, country, password, confirmPassword }
+            this.props.registerSendMail(user)
             handleAddSuccessMessage("send email.");
             this.setState({ stage: "verifyotp" });
             this.setState({ waiting: false });
-        } catch (err) {
+        } catch (error) {
             this.setState({ waiting: false });
             handleAddErrorMessages([
                 { msg: "Something went wrong. Please try again." }
             ]);
-            // if (err.response) {
-            //     handleAddErrorMessages(err.response.data.errors);
-            // } else {
-            //     handleAddErrorMessages([
-            //         { msg: "Something went wrong. Please try again." }
-            //     ]);
-            // }
         }
     };
 
@@ -101,18 +92,11 @@ class Signup extends Component {
             handleAddSuccessMessage([
                 { msg: "otp Success catch." }
             ]);
-        } catch (err) {
+        } catch (error) {
             this.setState({ waiting: false });
             handleAddErrorMessages([
                 { msg: "Something went wrong. Please try again." }
             ]);
-            // if (err.response) {
-            //     handleAddErrorMessages(err.response.data.errors);
-            // } else {
-            //     handleAddErrorMessages([
-            //         { msg: "Something went wrong. Please try again." }
-            //     ]);
-            // }
         }
     };
 
@@ -148,7 +132,7 @@ class Signup extends Component {
                     </Col>
                     <Col>
                         <div style={{ marginBottom: '10px' }}>
-                            <label style={{ fontWeight: '500', marginLeft: '10px' }}>Telephone Number</label>
+                            <label>Telephone Number</label>
                             <PhoneInput
                                 country={'in'}
                                 className='form-control'
@@ -164,7 +148,7 @@ class Signup extends Component {
                 <Row>
                     <Col>
                         <div style={{ marginBottom: '10px' }}>
-                            <label style={{ fontWeight: '500', marginLeft: '10px' }}>Country</label>
+                            <label>Country</label>
                             <CountryDropdown
                                 className='form-control'
                                 required
@@ -178,7 +162,7 @@ class Signup extends Component {
                     </Col>
                     <Col>
                         <div style={{ marginBottom: '10px' }}>
-                            <label style={{ fontWeight: '500', marginLeft: '10px' }}>Region (State)</label>
+                            <label>Region (State)</label>
                             <RegionDropdown
                                 className='form-control'
                                 country={this.state.country}
@@ -210,7 +194,7 @@ class Signup extends Component {
                 <Row>
                     <Col>
                         <div style={{ marginBottom: '10px' }} >
-                            <label style={{ fontWeight: '500', marginLeft: '10px' }}>Address</label>
+                            <label>Address</label>
                             <textarea
                                 className='form-control'
                                 style={{ resize: 'none' }}
@@ -232,7 +216,7 @@ class Signup extends Component {
                             label={"Password"}
                             placeholder={"Password"}
                             required
-                            minlength="6"
+                            minLength="6"
                             name="password"
                             value={this.state.password}
                             // onChange={(e) => setPassword(e.target.value)}
@@ -256,14 +240,17 @@ class Signup extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        {this.state.waiting && (<Button variant="primary"  disabled style={{ width: '100%' }}>Please wait...</Button>)}
-                        {!this.state.waiting && (<Button variant="primary" type="submit" style={{ width: '100%' }}>Submit</Button>)}
+                        <div style={{ padding: '10px 100px' }} >
+                            {this.state.waiting && (<Button variant="primary" disabled style={{ width: '100%' }}>Please wait...</Button>)}
+                            {!this.state.waiting && (<Button variant="primary" type="submit" style={{ width: '100%' }}>Submit</Button>)}
+                        </div>
                     </Col>
                 </Row>
             </Form>
+            <hr />
             <Row>
                 <Col>
-                    <div style={{ marginTop: '40px', textAlign: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
                         Already have an account? <Link to='/signin'>Login here</Link>
                     </div>
                 </Col>
@@ -308,6 +295,9 @@ class Signup extends Component {
 
 
     render() {
+
+        AOS.init({})
+
         return (
             <div>
                 <div>
@@ -319,14 +309,12 @@ class Signup extends Component {
                             display: 'flex',
                             justifyContent: 'center'
                         }}>
-                            {/* <div data-aos="fade-down" data-aos-offset="200" data-aos-easing="ease-in-sine" data-aos-duration="600"> */}
-                            {/* <div data-aos="fade-down"> */}
-                            <div>
+                            <div data-aos="fade-down">
                                 <div
-                                    className='shadow-lg bg-white'
+                                    className='shadow-lg bg-white rounded'
                                     style={{
-                                        width: '700px',
-                                        padding: '20px 0'
+                                        width: '800px',
+                                        padding: '20px'
                                     }}>
                                     <div>
                                         <Container>
@@ -336,7 +324,8 @@ class Signup extends Component {
                                                         textAlign: 'center',
                                                         marginBottom: '20px'
                                                     }}>
-                                                        <h3>Signup</h3>
+                                                        <h3>Create your account</h3>
+                                                        <hr />
                                                     </div>
                                                     {this.state.stage === "signup" && this.signupForm()}
                                                     {this.state.stage === "verifyotp" && this.otpForm()}
@@ -354,4 +343,16 @@ class Signup extends Component {
     }
 }
 
-export default withRouter(Signup);
+const mapStateToProps = (state) => ({
+
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    register,
+    registerSendMail,
+}, dispatch)
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(Signup));
