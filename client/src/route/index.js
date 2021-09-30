@@ -6,6 +6,7 @@ import PrivateRoute from "../components/HOC";
 import Home from "../containers/Home";
 import Signin from "../containers/Signin";
 import Signup from "../containers/Signup";
+import Test from "../containers/Test";
 import error404 from "../containers/404";
 import ScrollToTop from "../utils/scrollToTop";
 
@@ -62,6 +63,12 @@ class Routes extends React.Component {
                         </Route>
                         <Route exact path="/">
                             <Home
+                                handleAddErrorMessages={this.handleAddErrorMessages}
+                                handleAddSuccessMessage={this.handleAddSuccessMessage}
+                            />
+                        </Route>
+                        <Route exact path="/test">
+                            <Test
                                 handleAddErrorMessages={this.handleAddErrorMessages}
                                 handleAddSuccessMessage={this.handleAddSuccessMessage}
                             />

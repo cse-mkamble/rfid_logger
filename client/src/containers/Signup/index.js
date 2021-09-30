@@ -10,6 +10,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Input from "../../components/UI/Input";
 import Password from "../../components/UI/Password";
+import OTPInput from '../../components/UI/OTPInput';
 import { register, registerSendMail } from "../../redux/actions";
 import './index.css';
 
@@ -28,7 +29,8 @@ class Signup extends Component {
             confirmPassword: "",
             otp: "",
             stage: "signup",
-            waiting: false
+            waiting: false,
+            changeEmail: false
         }
     }
 
@@ -46,23 +48,19 @@ class Signup extends Component {
         const { schoolName, schoolEmail, schoolPhone, address, city, region, country, password, confirmPassword } = this.state;
         const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
         if (!schoolName || !schoolEmail || !schoolPhone || !address || !city || !region || !country || !password || !confirmPassword) {
-            handleAddErrorMessages([
-                { msg: "Required fields." }
-            ]);
+            handleAddErrorMessages([{ msg: "Required fields." }]);
             this.setState({ waiting: false });
             return;
         }
         try {
             const user = { schoolName, schoolEmail, schoolPhone, address, city, region, country, password, confirmPassword }
             this.props.registerSendMail(user)
-            handleAddSuccessMessage("send email.");
-            this.setState({ stage: "verifyotp" });
+            handleAddSuccessMessage("Sent mail. Please check your mail.");
+            this.setState({ stage: "verifyotpalert" });
             this.setState({ waiting: false });
         } catch (error) {
             this.setState({ waiting: false });
-            handleAddErrorMessages([
-                { msg: "Something went wrong. Please try again." }
-            ]);
+            handleAddErrorMessages([{ msg: "Something went wrong. Please try again." }]);
         }
     };
 
@@ -102,197 +100,295 @@ class Signup extends Component {
 
     signupForm = () => (
         <div>
-            <Form onSubmit={this.handleSignupSubmit}>
+            <div className='shadow-lg bg-white rounded' style={{ width: '800px', padding: '20px' }}>
+                <div>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <div style={{
+                                    textAlign: 'center',
+                                    marginBottom: '20px'
+                                }}>
+                                    <h3>Create your account</h3>
+                                    <hr />
+                                </div>
+                                <Form onSubmit={this.handleSignupSubmit}>
+                                    <Row>
+                                        <Col>
+                                            <Input
+                                                label="School Name"
+                                                placeholder="School Name"
+                                                required
+                                                name="schoolName"
+                                                value={this.state.schoolName}
+                                                type="text"
+                                                onChange={this.handleInputChange}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Input
+                                                label="Email"
+                                                placeholder="Email"
+                                                required
+                                                name="schoolEmail"
+                                                value={this.state.schoolEmail}
+                                                type="email"
+                                                onChange={this.handleInputChange}
+                                            />
+                                        </Col>
+                                        <Col>
+                                            <div style={{ marginBottom: '10px' }}>
+                                                <label>Telephone Number</label>
+                                                <PhoneInput
+                                                    country={'in'}
+                                                    className='form-control'
+                                                    name="schoolPhone"
+                                                    value={this.state.schoolPhone}
+                                                    onChange={(schoolPhone) => this.setState({ schoolPhone })}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <div style={{ marginBottom: '10px' }}>
+                                                <label>Country</label>
+                                                <CountryDropdown
+                                                    className='form-control'
+                                                    required
+                                                    name="country"
+                                                    value={this.state.country}
+                                                    onChange={(val) => this.setState({ country: val })}
+                                                />
+                                            </div>
+                                        </Col>
+                                        <Col>
+                                            <div style={{ marginBottom: '10px' }}>
+                                                <label>Region (State)</label>
+                                                <RegionDropdown
+                                                    className='form-control'
+                                                    country={this.state.country}
+                                                    required
+                                                    name="region"
+                                                    value={this.state.region}
+                                                    onChange={(val) => this.setState({ region: val })}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Input
+                                                label="City"
+                                                placeholder="City"
+                                                required
+                                                name="city"
+                                                value={this.state.city}
+                                                type="text"
+                                                onChange={this.handleInputChange}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <div style={{ marginBottom: '10px' }} >
+                                                <label>Address</label>
+                                                <textarea
+                                                    className='form-control'
+                                                    style={{ resize: 'none' }}
+                                                    rows="3"
+                                                    placeholder="Address"
+                                                    required
+                                                    name="address"
+                                                    value={this.state.address}
+                                                    type="text"
+                                                    onChange={this.handleInputChange}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Password
+                                                label={"Password"}
+                                                placeholder={"Password"}
+                                                required
+                                                minLength="6"
+                                                name="password"
+                                                value={this.state.password}
+                                                onChange={this.handleInputChange}
+                                                errorMessage={""}
+                                            />
+                                        </Col>
+                                        <Col>
+                                            <Password
+                                                label={"Confirm Password"}
+                                                placeholder={"Confirm Password"}
+                                                required
+                                                minlength="6"
+                                                name="confirmPassword"
+                                                value={this.state.confirmPassword}
+                                                onChange={this.handleInputChange}
+                                            // errorMessage={errors.confirm_password}
+                                            />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <div style={{ padding: '10px 100px' }} >
+                                                {this.state.waiting && (<Button variant="primary" disabled style={{ width: '100%' }}>Please wait...</Button>)}
+                                                {!this.state.waiting && (<Button variant="primary" type="submit" style={{ width: '100%' }}>Submit</Button>)}
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                                <hr />
+                                <Row>
+                                    <Col>
+                                        <div style={{ textAlign: 'center' }}>
+                                            Already have an account? <Link to='/signin'>Login here</Link>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
+            </div>
+        </div>
+    )
+
+    handleChangeEmailTrue = async () => {
+        this.setState({ changeEmail: true })
+    }
+
+    handleVerifyOtpForm = async () => {
+        this.setState({ stage: "verifyotp" })
+    }
+
+    handleSentMail = async event => {
+        event.preventDefault();
+        const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
+        try {
+            this.props.registerSendMail(this.state)
+            handleAddSuccessMessage("Sent mail. Please check your mail.");
+        } catch (error) {
+            handleAddErrorMessages([{ msg: "Something went wrong. Please try again." }]);
+        }
+    };
+
+    changeEmailForm = () => (
+        <div>
+            <Form onSubmit={this.handleSentMail}>
                 <Row>
                     <Col>
                         <Input
-                            label="School Name"
-                            placeholder="School Name"
-                            required
-                            name="schoolName"
-                            value={this.state.schoolName}
-                            type="text"
-                            // onChange={(e) => setSchoolName(e.target.value)}
-                            onChange={this.handleInputChange}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Input
-                            label="Email"
+                            label="Enter email"
                             placeholder="Email"
                             required
                             name="schoolEmail"
                             value={this.state.schoolEmail}
                             type="email"
-                            // onChange={(e) => setSchoolEmail(e.target.value)}
-                            onChange={this.handleInputChange}
-                        />
-                    </Col>
-                    <Col>
-                        <div style={{ marginBottom: '10px' }}>
-                            <label>Telephone Number</label>
-                            <PhoneInput
-                                country={'in'}
-                                className='form-control'
-                                name="schoolPhone"
-                                value={this.state.schoolPhone}
-                                // onChange={this.handleInputChange}
-                                onChange={(schoolPhone) => this.setState({ schoolPhone })}
-                            />
-                            {/* <div className="text-danger">{errors.school_phone}</div> */}
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <div style={{ marginBottom: '10px' }}>
-                            <label>Country</label>
-                            <CountryDropdown
-                                className='form-control'
-                                required
-                                name="country"
-                                value={this.state.country}
-                                onChange={(val) => this.setState({ country: val })}
-                            // onChange={(val) => setCountry(val)} 
-                            // onChange={this.handleInputChange}
-                            />
-                        </div>
-                    </Col>
-                    <Col>
-                        <div style={{ marginBottom: '10px' }}>
-                            <label>Region (State)</label>
-                            <RegionDropdown
-                                className='form-control'
-                                country={this.state.country}
-                                required
-                                name="region"
-                                value={this.state.region}
-                                onChange={(val) => this.setState({ region: val })}
-                            // onChange={(val) => setRegion(val)} 
-                            // this.setState({ waiting: false });
-                            // onChange={this.handleInputChange}
-                            />
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Input
-                            label="City"
-                            placeholder="City"
-                            required
-                            name="city"
-                            value={this.state.city}
-                            type="text"
-                            // onChange={(e) => setCity(e.target.value)}
                             onChange={this.handleInputChange}
                         />
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <div style={{ marginBottom: '10px' }} >
-                            <label>Address</label>
-                            <textarea
-                                className='form-control'
-                                style={{ resize: 'none' }}
-                                rows="3"
-                                placeholder="Address"
-                                required
-                                name="address"
-                                value={this.state.address}
-                                type="text"
-                                // onChange={(e) => setAddress(e.target.value)}
-                                onChange={this.handleInputChange}
-                            />
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Password
-                            label={"Password"}
-                            placeholder={"Password"}
-                            required
-                            minLength="6"
-                            name="password"
-                            value={this.state.password}
-                            // onChange={(e) => setPassword(e.target.value)}
-                            onChange={this.handleInputChange}
-                            errorMessage={""}
-                        />
-                    </Col>
-                    <Col>
-                        <Password
-                            label={"Confirm Password"}
-                            placeholder={"Confirm Password"}
-                            required
-                            minlength="6"
-                            name="confirmPassword"
-                            value={this.state.confirmPassword}
-                            // onChange={(e) => setConfirmPassword(e.target.value)}
-                            onChange={this.handleInputChange}
-                        // errorMessage={errors.confirm_password}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <div style={{ padding: '10px 100px' }} >
-                            {this.state.waiting && (<Button variant="primary" disabled style={{ width: '100%' }}>Please wait...</Button>)}
-                            {!this.state.waiting && (<Button variant="primary" type="submit" style={{ width: '100%' }}>Submit</Button>)}
-                        </div>
+                        <Button color="primary" type="submit">Sent Mail</Button>
                     </Col>
                 </Row>
             </Form>
-            <hr />
-            <Row>
-                <Col>
-                    <div style={{ textAlign: 'center' }}>
-                        Already have an account? <Link to='/signin'>Login here</Link>
+        </div>
+    )
+
+    otpFormAlert = () => (
+        <div>
+            <div>
+                <div>
+                    <div style={{
+                        width: '100%',
+                        marginTop: '50px',
+                        padding: '20px',
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}>
+                        <div data-aos="fade-down">
+                            <div>
+                                <div className='shadow-lg bg-white rounded' style={{ width: '600px', padding: '10px 60px 60px' }}>
+                                    <div>
+                                        <Container>
+                                            <div style={{ display: 'flex', justifyContent: 'center' }} >
+                                                <img style={{ width: '240px' }} src="https://res.cloudinary.com/mayurkamble/image/upload/v1632983921/icon/ofxp8e2ghdiodfggfe8e.gif" />
+                                            </div>
+                                            <div style={{ textAlign: 'center', color: '#000000c0' }}>
+                                                <h3>One-Time PIN</h3>
+                                                <div style={{ padding: '20px 40px' }} >
+                                                    <div>6-digit code has been sent via message.</div>
+                                                    <div>Please, check your mail.</div>
+                                                </div>
+                                                <div>
+                                                    {!this.state.changeEmail ? (<div>
+                                                        <div>Is this your mail?</div>
+                                                        <h4>{this.state.schoolEmail}</h4>
+                                                        <Button variant="link" onClick={this.handleChangeEmailTrue} >Not your mail?</Button>
+                                                    </div>) : (<div>
+                                                        {this.changeEmailForm()}
+                                                    </div>)}
+                                                </div>
+                                                <p style={{ color: '#ff00009e', fontSize: '14px', margin: '20px 0' }}>We encountered an error for your request. For transactions, please check your account before trying again.</p>
+                                                <Button style={{ fontWeight: 'bold' }} variant='danger' onClick={this.handleVerifyOtpForm} >Yes, Code has get in mail</Button>
+                                            </div>
+                                        </Container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
         </div>
     )
 
     otpForm = () => (
-        <div style={{ padding: '20px 40px' }}>
-            <Form>
-                <Row>
-                    <Col>
-                        <Input
-                            label="OTP"
-                            placeholder="000000"
-                            required
-                            name="otp"
-                            value={this.state.otp}
-                            type="text"
-                            // onChange={(e) => setOtp(e.target.value)}
-                            onChange={this.handleInputChange}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        {this.state.waiting && (
-                            <Button color="primary" disabled>
-                                Please wait...
-                            </Button>
-                        )}
-                        {!this.state.waiting && (
-                            <Button color="primary" onClick={this.handleOTPSubmit} type="submit">
-                                Submit OTP
-                            </Button>
-                        )}
-                    </Col>
-                </Row>
-            </Form>
+        <div>
+            <div style={{
+                width: '100%',
+                marginTop: '50px',
+                padding: '20px',
+                display: 'flex',
+                justifyContent: 'center'
+            }}>
+                <div data-aos="fade-down">
+                    <div>
+                        <div className='shadow-lg bg-white rounded' style={{ width: '600px' }}>
+                            <div>
+                                <Container>
+                                    <div style={{ textAlign: 'center', padding: '50px 0' }}>
+                                        <h3>Please Enter the OTP to Verify your Account</h3>
+                                        <div>A OTP (one time Password) has been sent to mail</div>
+                                        <OTPInput
+                                            autoFocus
+                                            isNumberInput
+                                            length={6}
+                                            className="otpContainer"
+                                            inputClassName="otpInput"
+                                            // onChangeOTP={(otp) => console.log('Number OTP: ', otp)}
+                                            onChangeOTP={(otp) => this.state({ otp })}
+                                        />
+                                        <div style={{ marginBottom: '10px' }} ><Button variant='danger' size='lg' >Validate OTP</Button></div>
+                                        <div><Button variant='none' size='lg' >Resend OTP</Button></div>
+                                    </div>
+                                </Container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
-
 
     render() {
 
@@ -310,29 +406,10 @@ class Signup extends Component {
                             justifyContent: 'center'
                         }}>
                             <div data-aos="fade-down">
-                                <div
-                                    className='shadow-lg bg-white rounded'
-                                    style={{
-                                        width: '800px',
-                                        padding: '20px'
-                                    }}>
-                                    <div>
-                                        <Container>
-                                            <Row>
-                                                <Col>
-                                                    <div style={{
-                                                        textAlign: 'center',
-                                                        marginBottom: '20px'
-                                                    }}>
-                                                        <h3>Create your account</h3>
-                                                        <hr />
-                                                    </div>
-                                                    {this.state.stage === "signup" && this.signupForm()}
-                                                    {this.state.stage === "verifyotp" && this.otpForm()}
-                                                </Col>
-                                            </Row>
-                                        </Container>
-                                    </div>
+                                <div>
+                                    {this.state.stage === "signup" && this.signupForm()}
+                                    {this.state.stage === "verifyotpalert" && this.otpFormAlert()}
+                                    {this.state.stage === "verifyotp" && this.otpForm()}
                                 </div>
                             </div>
                         </div>
