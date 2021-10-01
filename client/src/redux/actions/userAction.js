@@ -2,14 +2,19 @@ import axios from "axios"
 import { constants } from "../constants"
 
 export const registerSendMail = (user) => {
-    return dispatch => {
+    const { school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = user;
+    return async (dispatch) => {
         dispatch({ type: constants.USER_REGISTER_SEND_MAIL_REQUEST })
         try {
-            console.log(user)
-            // const response = await axios.post(`/api/v1/users/register`, { school_name: schoolName, school_email: schoolEmail, school_phone: schoolPhone, address, city, region, country, password, confirm_password: confirmPassword })
+            const response = await axios.post(`/api/v1/users/register`, { school_name, school_email, school_phone, address, city, region, country, password, confirm_password })
             dispatch({ type: constants.USER_REGISTER_SEND_MAIL_SUCCESS })
         } catch (error) {
-            dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: error })
+            if (error.response) {
+                console.log(error.response)
+                dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: error.response.data.errors })
+            } else {
+                dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: "Frontend: Something went wrong." })
+            }
         }
     }
 }

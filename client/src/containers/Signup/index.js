@@ -18,26 +18,26 @@ class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            schoolName: "",
-            schoolEmail: "",
-            schoolPhone: "",
+            school_name: "",
+            school_email: "",
+            school_phone: "",
             address: "",
             city: "",
             region: "",
             country: "",
             password: "",
-            confirmPassword: "",
+            confirm_password: "",
             otp: "",
             stage: "signup",
             waiting: false,
-            changeEmail: false,
+            change_email: false,
             fields: {},
             errors: {},
         }
     }
 
     componentDidMount() {
-        // console.log(this.props)
+        console.log(this.props)
     }
 
     handleValidation() {
@@ -45,16 +45,16 @@ class Signup extends Component {
         let formIsValid = true;
 
         // schoolPhone
-        if (!this.state.schoolPhone) {
+        if (!this.state.school_phone) {
             formIsValid = false;
-            errors["schoolPhone"] = "Plese, fill in telephone number filed.";
+            errors["school_phone"] = "Plese, fill in telephone number filed.";
         }
 
         // confirmPassword
-        if (this.state.password !== "undefined" && this.state.confirmPassword !== "undefined") {
-            if (this.state.password != this.state.confirmPassword) {
+        if (this.state.password !== "undefined" && this.state.confirm_password !== "undefined") {
+            if (this.state.password != this.state.confirm_password) {
                 formIsValid = false;
-                errors["confirmPassword"] = "Confirm password don't match.";
+                errors["confirm_password"] = "Confirm password don't match.";
             }
         }
 
@@ -66,24 +66,25 @@ class Signup extends Component {
         event.preventDefault();
         if (this.handleValidation()) {
             this.setState({ waiting: true });
-            const { schoolName, schoolEmail, schoolPhone, address, city, region, country, password, confirmPassword } = this.state;
+            const { school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = this.state;
             const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
-            if (!schoolName || !schoolEmail || !schoolPhone || !address || !city || !region || !country || !password || !confirmPassword) {
-                handleAddErrorMessages([{ msg: "Required fields." }]);
-                this.setState({ waiting: false });
-                return;
-            }
             try {
-                this.props.registerSendMail(this.state)
-                handleAddSuccessMessage("Sent mail. Please check your mail.");
-                this.setState({ stage: "verifyotpalert" });
+                const user = { school_name, school_email, school_phone, address, city, region, country, password, confirm_password };
+                this.props.registerSendMail(user)
+                const { success, error } = this.props.registerUserSendMailReducer;
+                // console.log(this.props.registerUserSendMailReducer)
+                if (success) {
+                    handleAddSuccessMessage("Sent mail. Please check your mail.");
+                    this.setState({ stage: "verifyotpalert" });
+                } else {
+                    handleAddErrorMessages([{ msg: "Something went wrong. Please try again." }]);
+                }
                 this.setState({ waiting: false });
             } catch (error) {
                 this.setState({ waiting: false });
                 handleAddErrorMessages([{ msg: "Something went wrong. Please try again." }]);
             }
         } else {
-            // console.log(this.state.errors)
             this.props.handleAddErrorMessages([{ msg: "Form has errors." }]);
         }
     };
@@ -114,8 +115,8 @@ class Signup extends Component {
                                                     label="School Name"
                                                     placeholder="School Name"
                                                     required
-                                                    name="schoolName"
-                                                    value={this.state.schoolName}
+                                                    name="school_name"
+                                                    value={this.state.school_name}
                                                     type="text"
                                                     onChange={this.handleInputChange}
                                                 />
@@ -124,11 +125,11 @@ class Signup extends Component {
                                         <Row>
                                             <Col>
                                                 <Input
-                                                    label="Email"
-                                                    placeholder="Email"
+                                                    label="School Email"
+                                                    placeholder="School Email"
                                                     required
-                                                    name="schoolEmail"
-                                                    value={this.state.schoolEmail}
+                                                    name="school_email"
+                                                    value={this.state.school_email}
                                                     type="email"
                                                     onChange={this.handleInputChange}
                                                 />
@@ -140,11 +141,11 @@ class Signup extends Component {
                                                         required
                                                         country={'in'}
                                                         className='form-control'
-                                                        name="schoolPhone"
-                                                        value={this.state.schoolPhone}
-                                                        onChange={(schoolPhone) => this.setState({ schoolPhone })}
+                                                        name="school_phone"
+                                                        value={this.state.school_phone}
+                                                        onChange={(school_phone) => this.setState({ school_phone })}
                                                     />
-                                                    <span className="text-danger">{this.state.errors["schoolPhone"]}</span>
+                                                    <span className="text-danger">{this.state.errors["school_phone"]}</span>
                                                     <br />
                                                 </div>
                                             </Col>
@@ -226,10 +227,10 @@ class Signup extends Component {
                                                     placeholder={"Confirm Password"}
                                                     required
                                                     minlength="6"
-                                                    name="confirmPassword"
-                                                    value={this.state.confirmPassword}
+                                                    name="confirm_password"
+                                                    value={this.state.confirm_password}
                                                     onChange={this.handleInputChange}
-                                                    errorMessage={this.state.errors["confirmPassword"]}
+                                                    errorMessage={this.state.errors["confirm_password"]}
                                                 />
                                             </Col>
                                         </Row>
@@ -259,19 +260,21 @@ class Signup extends Component {
         </div>
     )
 
-    handleChangeEmailTrue = async () => {
-        this.setState({ changeEmail: true })
+    handleChangeEmailTrue = () => {
+        this.setState({ change_email: true })
     }
 
-    handleVerifyOtpForm = async () => {
+    handleVerifyOtpForm = () => {
         this.setState({ stage: "verifyotp" })
     }
 
-    handleSentMail = async event => {
+    handleSentMail = event => {
         event.preventDefault();
+        const { school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = this.state;
         const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
         try {
-            this.props.registerSendMail(this.state)
+            const user = { school_name, school_email, school_phone, address, city, region, country, password, confirm_password };
+            this.props.registerSendMail(user)
             handleAddSuccessMessage("Sent mail. Please check your mail.");
         } catch (error) {
             handleAddErrorMessages([{ msg: "Something went wrong. Please try again." }]);
@@ -284,11 +287,11 @@ class Signup extends Component {
                 <Row>
                     <Col>
                         <Input
-                            label="Enter email"
-                            placeholder="Email"
+                            label="Enter school email"
+                            placeholder="School Email"
                             required
-                            name="schoolEmail"
-                            value={this.state.schoolEmail}
+                            name="school_email"
+                            value={this.state.school_email}
                             type="email"
                             onChange={this.handleInputChange}
                         />
@@ -329,9 +332,9 @@ class Signup extends Component {
                                                     <div>Please, check your mail.</div>
                                                 </div>
                                                 <div>
-                                                    {!this.state.changeEmail ? (<div>
+                                                    {!this.state.change_email ? (<div>
                                                         <div>Is this your mail?</div>
-                                                        <h4>{this.state.schoolEmail}</h4>
+                                                        <h4>{this.state.school_email}</h4>
                                                         <Button variant="link" onClick={this.handleChangeEmailTrue} >Not your mail?</Button>
                                                     </div>) : (<div>
                                                         {this.changeEmailForm()}
@@ -351,10 +354,10 @@ class Signup extends Component {
         </div>
     )
 
-    handleOTPSubmit = async event => {
+    handleOTPSubmit = event => {
         event.preventDefault();
         this.setState({ waiting: true });
-        const { schoolEmail, otp } = this.state;
+        const { school_email, otp } = this.state;
         const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
         if (!otp) {
             handleAddErrorMessages([{ msg: "OTP is a required field." }]);
@@ -364,14 +367,10 @@ class Signup extends Component {
         try {
             // this.props.register()
             this.setState({ waiting: false });
-            handleAddSuccessMessage([
-                { msg: "otp Success catch." }
-            ]);
+            handleAddSuccessMessage([{ msg: "otp Success catch." }]);
         } catch (error) {
             this.setState({ waiting: false });
-            handleAddErrorMessages([
-                { msg: "Something went wrong. Please try again." }
-            ]);
+            handleAddErrorMessages([{ msg: "Something went wrong. Please try again." }]);
         }
     };
 
@@ -390,7 +389,7 @@ class Signup extends Component {
                             <div>
                                 <Container>
                                     <div style={{ textAlign: 'center', padding: '50px 0' }}>
-                                        <h3>Please Enter the OTP to Verify your Account</h3>
+                                        <h4>Please Enter the OTP to Verify your Account</h4>
                                         <div>A OTP (one time Password) has been sent to mail</div>
                                         <Form onSubmit={this.handleOTPSubmit}>
                                             <Row>
@@ -457,9 +456,11 @@ class Signup extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-
-})
+const mapStateToProps = (state) => {
+    return {
+        registerUserSendMailReducer: state.registerUserSendMailReducer,
+    }
+};
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     register,

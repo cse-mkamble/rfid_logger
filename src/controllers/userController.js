@@ -9,13 +9,15 @@ const HttpException = require('../utils/HttpExceptionUtils');
  ******************************************************************************/
 class UserController {
 
-    register = async (req, res, next) => {
+    register = async (req, response, next) => {
         this.checkValidation(req);
         console.log(req.body)
         // await this.hashPassword(req);
         // const result = await UserModel.create(req.body);
         // if (!result) throw new HttpException(500, 'Something went wrong');
-        // res.status(201).send('User was created!');
+        response.status(201).json({ success: 'User was created!' });
+        // new HttpException(500, 'Something went wrong');
+        // res.status(500).json({ errors: 'backend Something went wrong' });
     };
 
 

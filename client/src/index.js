@@ -11,9 +11,7 @@ window.store = store;
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <Routes />
-    </React.StrictMode>
+    <Routes />
   </Provider>,
   document.getElementById('main')
 );
