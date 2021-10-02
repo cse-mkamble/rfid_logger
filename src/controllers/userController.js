@@ -1,6 +1,9 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
+
 const UserModel = require('../models/userModel');
 const HttpException = require('../utils/HttpExceptionUtils');
 
@@ -8,23 +11,6 @@ const HttpException = require('../utils/HttpExceptionUtils');
  *                              User Controller
  ******************************************************************************/
 class UserController {
-
-    register = async (req, response, next) => {
-        this.checkValidation(req);
-        console.log(req.body)
-        // await this.hashPassword(req);
-        // const result = await UserModel.create(req.body);
-        // if (!result) throw new HttpException(500, 'Something went wrong');
-        response.status(201).json({ success: 'User was created!' });
-        // new HttpException(500, 'Something went wrong');
-        // res.status(500).json({ errors: 'backend Something went wrong' });
-    };
-
-
-
-
-
-
     getAllUsers = async (req, res, next) => {
         let userList = await UserModel.find();
         if (!userList.length) {

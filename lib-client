@@ -11,16 +11,12 @@ npm install --save react-redux
 npm install --save react-router-dom
 npm install --save redux-devtools-extension
 npm install --save redux-thunk
-npm install @material-ui/core
-npm install @material-ui/icons
-npm install aos --save
-
-npm install react-country-region-selector
-npm install react-phone-input-2 --save
+npm install --save aos 
+npm install --save react-country-region-selector
+npm install --save react-phone-input-2 
+npm install --save typescript
+npm install --save react-bs-notifier
 
 npm install @mui/material @emotion/react @emotion/styled
-npm install @mui/material@next @mui/styled-engine-sc@next styled-components
-npm install @mui/icons-material@next
-
-npm install react-bs-notifier
-npm install --save typescript
+npm install @mui/material @mui/styled-engine-sc styled-components
+npm install @mui/icons-material
