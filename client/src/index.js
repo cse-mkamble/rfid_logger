@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import store from "./redux/store";
 
 import AlertsView from "./components/AlertsView";
 import error404 from "./screens/404";
@@ -62,7 +65,7 @@ class Main extends React.Component {
                     handleAddSuccessMessage={this.handleAddSuccessMessage}
                   />
                 </Route>
-                <Route exact path="/signup">
+                <Route path="/signup">
                   <Register
                     handleAddErrorMessages={this.handleAddErrorMessages}
                     handleAddSuccessMessage={this.handleAddSuccessMessage}
@@ -95,7 +98,11 @@ class Main extends React.Component {
   }
 }
 
+window.store = store;
+
 ReactDOM.render(
-  <Main />,
+  <Provider store={store}>
+    <Main />
+  </Provider>,
   document.getElementById('main')
 );
