@@ -22,6 +22,12 @@ class Main extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // document.addEventListener('contextmenu', (e) => {
+    //   e.preventDefault();
+    // });
+  };
+
   handleAddErrorMessages = errors => {
     this.setState({ errorMessages: [...this.state.errorMessages, ...errors] });
   };

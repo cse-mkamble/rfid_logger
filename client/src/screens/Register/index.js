@@ -12,7 +12,7 @@ export default class Register extends Component {
                 <div>
                     <div style={{ width: '100%', marginTop: '40px', padding: '20px', display: 'flex', justifyContent: 'center' }}>
                         <div>
-                            <div className='bg-white rounded' style={{ width: '800px', height: '600px', border: '1px solid #dadce0' }}>
+                            <div className='bg-white rounded' style={{ width: '800px', border: '1px solid #dadce0' }}>
                                 <div>
                                     <Switch>
                                         <Route exact path="/signup">
