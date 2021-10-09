@@ -71,7 +71,7 @@ class Main extends React.Component {
                     handleAddSuccessMessage={this.handleAddSuccessMessage}
                   />
                 </Route>
-                <Route path="/signup">
+                <Route exact path="/signup">
                   <Register
                     handleAddErrorMessages={this.handleAddErrorMessages}
                     handleAddSuccessMessage={this.handleAddSuccessMessage}

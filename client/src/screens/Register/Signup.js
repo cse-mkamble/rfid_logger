@@ -6,6 +6,7 @@ import CSCData from "../../countries_states_cities";
 
 const Signup = (props) => {
 
+    const [owner_name, setOwnerName] = useState('');
     const [school_name, setSchoolName] = useState('');
     const [school_email, setSchoolEmail] = useState('');
     const [school_phone, setSchoolPhone] = useState('');
@@ -36,9 +37,9 @@ const Signup = (props) => {
         let errors = {};
         let formIsValid = true;
         // schoolPhone
-        if (!school_phone) {
+        if (!school_phone || school_phone.length < 4) {
             formIsValid = false;
-            errors["school_phone"] = "Plese, fill in telephone number filed.";
+            errors["school_phone"] = "Plese, fill in phone number filed.";
             setIsErrors(true)
         } else { setIsErrors(false) }
         // confirmPassword
@@ -55,9 +56,9 @@ const Signup = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (handleFormValidation()) {
-            const user = { school_name, school_email, school_phone, address, city, region, country, password, confirm_password };
-            console.log(user);
+            const user = { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password };
             props.handleAddSuccessMessage("Sent mail. Please check your mail.");
+            props.handleNext(user);
         } else {
             props.handleAddErrorMessages([{ msg: "Form has errors." }]);
         }
@@ -103,14 +104,25 @@ const Signup = (props) => {
                         <Typography component="h1" variant="h5">Create your Account</Typography>
                         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={3}>
-                                <Grid item xs={12}>
+                                <Grid item xs={12} sm={4}>
+                                    <TextField
+                                        autoComplete="ownerName"
+                                        required
+                                        fullWidth
+                                        autoFocus
+                                        size="small"
+                                        label="Owner Full Name"
+                                        value={owner_name}
+                                        onChange={(e) => setOwnerName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={8}>
                                     <TextField
                                         autoComplete="schoolName"
                                         required
                                         fullWidth
                                         size="small"
                                         label="School Name"
-                                        autoFocus
                                         value={school_name}
                                         onChange={(e) => setSchoolName(e.target.value)}
                                     />
@@ -133,7 +145,7 @@ const Signup = (props) => {
                                         size="small"
                                         required
                                         variant="outlined"
-                                        label="School Telephone Number"
+                                        label="School Phone Number"
                                         data-cy="user-phone"
                                         defaultCountry={"in"}
                                         error={is_errors}
