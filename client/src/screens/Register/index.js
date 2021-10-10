@@ -45,6 +45,7 @@ export default class Register extends Component {
             case 2:
                 return (
                     <VerifyOTP
+                        handleNext={this.handleVerifyOTPNext}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
@@ -59,6 +60,11 @@ export default class Register extends Component {
     };
 
     handleVerifySendMailNext = (data) => {
+        this.setState({ activeStep: this.state.activeStep + 1 });
+        console.log(data);
+    };
+
+    handleVerifyOTPNext = (data) => {
         this.setState({ activeStep: this.state.activeStep + 1 });
         console.log(data);
     };
