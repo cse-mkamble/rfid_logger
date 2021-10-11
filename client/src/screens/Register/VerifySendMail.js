@@ -1,30 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, TextField, Grid, Box, Container } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const VerifySendMail = (props) => {
 
-    const [school_email, setSchoolEmail] = useState('cse.mkamble@gmail.com');
+    AOS.init({});
+
+    const [school_email, setSchoolEmail] = useState(props.state.school_email);
     const [isSent, setIsSent] = useState(true);
     const [change_email, setChangeEmail] = useState(false);
 
+    useEffect(() => {
+
+    }, []);
+
     const handleSentMail = (event) => {
         event.preventDefault();
-        props.handleAddSuccessMessage("Sent mail. Please check your mail.");
-        setIsSent(true);
-        // const { school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = this.state;
-        // const { handleAddErrorMessages, handleAddSuccessMessage } = this.props;
-        // try {
-        //     const user = { school_name, school_email, school_phone, address, city, region, country, password, confirm_password };
-        //     this.props.registerSendMail(user)
-        //     handleAddSuccessMessage("Sent mail. Please check your mail.");
-        // } catch (error) {
-        //     handleAddErrorMessages([{ msg: "Something went wrong. Please try again." }]);
-        // }
+        if (school_email) {
+            props.sentEmail(props.state, school_email)
+            setIsSent(true);
+            props.handleAddSuccessMessage("Sent mail. Please check your mail.");
+        } else {
+            props.handleAddErrorMessages([{ msg: "Please enter your mail." }]);
+        }
     };
 
     const changeEmailForm = () => (
-        <div>
+        <div style={{ padding: '0 60px' }}>
             <Box component="form" onSubmit={handleSentMail} sx={{ mt: 3 }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -52,16 +56,15 @@ const VerifySendMail = (props) => {
         </div>
     )
 
-
     return (
         <div>
-            <div data-aos="fade-left">
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div data-aos="fade-left">
                     <div style={{ width: '600px', padding: '10px' }}>
                         <div>
                             <Container>
-                                <div style={{ display: 'flex', justifyContent: 'center' }} >
-                                    <img style={{ width: '240px' }} src="https://res.cloudinary.com/mayurkamble/image/upload/v1632983921/icon/ofxp8e2ghdiodfggfe8e.gif" />
+                                <div style={{ display: 'flex', justifyContent: 'center', height: '160px' }} >
+                                    <img style={{ width: '240px' }} src="https://res.cloudinary.com/mayurkamble/image/upload/v1632983921/icon/ofxp8e2ghdiodfggfe8e.gif" alt='SentMail gif' />
                                 </div>
                                 <div style={{ textAlign: 'center' }}>
                                     <h3>One-Time PIN</h3>
@@ -73,8 +76,7 @@ const VerifySendMail = (props) => {
                                         {!change_email ? (<div>
                                             <div>Is this your mail?</div>
                                             <h4>{school_email}</h4>
-                                            <Button color="primary" onClick={(event) => {
-                                                event.preventDefault();
+                                            <Button color="primary" onClick={() => {
                                                 setIsSent(false)
                                                 setChangeEmail(true)
                                             }} >Not your mail?</Button>
@@ -88,8 +90,7 @@ const VerifySendMail = (props) => {
                                         color="error"
                                         sx={{ mt: 2, mb: 2 }}
                                         style={{ fontWeight: 'bold' }}
-                                        onClick={(event) => {
-                                            event.preventDefault();
+                                        onClick={() => {
                                             if (school_email) {
                                                 if (isSent) {
                                                     props.handleNext(school_email);

@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography, Container, InputLabel, Select, MenuItem } from "@mui/material";
+import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography, Container, MenuItem } from "@mui/material";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import MuiPhoneNumber from "material-ui-phone-number";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import CSCData from "../../countries_states_cities";
 
 const Signup = (props) => {
 
-    const [owner_name, setOwnerName] = useState('');
-    const [school_name, setSchoolName] = useState('');
-    const [school_email, setSchoolEmail] = useState('');
-    const [school_phone, setSchoolPhone] = useState('');
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [region, setRegion] = useState('');
-    const [country, setCountry] = useState('');
+    AOS.init({});
+
+    const [owner_name, setOwnerName] = useState(props.state.owner_name);
+    const [school_name, setSchoolName] = useState(props.state.school_name);
+    const [school_email, setSchoolEmail] = useState(props.state.school_email);
+    const [school_phone, setSchoolPhone] = useState(props.state.school_phone);
+    const [address, setAddress] = useState(props.state.address);
+    const [city, setCity] = useState(props.state.city);
+    const [region, setRegion] = useState(props.state.region);
+    const [country, setCountry] = useState(props.state.country);
     const [countryList, setCountryList] = useState([]);
     const [regionList, setRegionList] = useState([]);
     const [cityList, setCityList] = useState([]);
-    const [password, setPassword] = useState('');
-    const [confirm_password, setConfirmPassword] = useState('');
+    const [password, setPassword] = useState(props.state.password);
+    const [confirm_password, setConfirmPassword] = useState(props.state.confirm_password);
     const [error_confirm_password, setErrorConfirmPassword] = useState('');
     const [is_error_confirm_password, setIsErrorConfirmPassword] = useState(false);
     const [is_errors, setIsErrors] = useState(false);
@@ -26,10 +30,6 @@ const Signup = (props) => {
     const [errors, setErrors] = useState([]);
 
     useEffect(() => {
-        // console.log(props)
-        // console.log(CSCData)
-
-
         setCountryList(CSCData);
     }, [])
 
@@ -88,9 +88,9 @@ const Signup = (props) => {
         setSchoolPhone(value);
     }
 
-    const signupForm = () => {
-        return (
-            <div>
+    return (
+        <div>
+            <div data-aos="fade-left">
                 <Container>
                     <CssBaseline />
                     <Box
@@ -280,12 +280,6 @@ const Signup = (props) => {
                     </Box>
                 </Container>
             </div >
-        )
-    }
-
-    return (
-        <div>
-            {signupForm()}
         </div>
     );
 };

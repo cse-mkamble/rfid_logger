@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router";
 
 import Signup from "./Signup";
 import VerifySendMail from "./VerifySendMail";
@@ -26,12 +25,21 @@ export default class Register extends Component {
         };
     }
 
+    componentDidMount() {
+
+    }
+
+    handleInputChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
+    };
+
     getStepContent(step) {
         switch (step) {
             case 0:
                 return (
                     <Signup
                         handleNext={this.handleSignUpNext}
+                        state={this.state}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
@@ -39,6 +47,8 @@ export default class Register extends Component {
                 return (
                     <VerifySendMail
                         handleNext={this.handleVerifySendMailNext}
+                        state={this.state}
+                        sentEmail={this.handleSentEmail}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
@@ -46,6 +56,8 @@ export default class Register extends Component {
                 return (
                     <VerifyOTP
                         handleNext={this.handleVerifyOTPNext}
+                        state={this.state}
+                        sentEmail={this.handleSentEmail}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
@@ -56,18 +68,25 @@ export default class Register extends Component {
 
     handleSignUpNext = (data) => {
         this.setState({ activeStep: this.state.activeStep + 1 });
-        console.log(data);
+        const { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = data;
+        this.setState({ owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password });
+        this.handleSentEmail(data, school_email)
     };
 
     handleVerifySendMailNext = (data) => {
         this.setState({ activeStep: this.state.activeStep + 1 });
-        console.log(data);
+        this.setState({ school_email: data })
     };
 
     handleVerifyOTPNext = (data) => {
         this.setState({ activeStep: this.state.activeStep + 1 });
-        console.log(data);
+        // console.log(data);
     };
+
+    handleSentEmail = (data, email) => {
+        console.log(data)
+        console.log(email)
+    }
 
     render() {
         return (

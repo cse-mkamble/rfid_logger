@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { Button, TextField, Grid, Box, Container } from "@mui/material";
+import { Button, Grid, Box, Container } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import OTPInput from "../../components/UI/OTPInput";
 
 const VerifyOTP = (props) => {
+
+    AOS.init({});
 
     const [OTP, setOTP] = useState('');
 
@@ -17,40 +21,41 @@ const VerifyOTP = (props) => {
     };
 
     return (
-        <div>
-            <div style={{ width: '600px', textAlign: 'center', padding: '30px' }}>
-                <Container>
-                    <h4>Please Enter the OTP to Verify your Account</h4>
-                    <div>A OTP (one time Password) has been sent to mail</div>
-                    <Box component="form" onSubmit={handleOTPSubmit} sx={{ mt: 3 }}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <OTPInput
-                                    autoFocus
-                                    isNumberInput
-                                    length={6}
-                                    className="otpContainer"
-                                    inputClassName="otpInput"
-                                    onChangeOTP={(otp) => setOTP(otp)}
-                                // onChangeOTP={(otp) => this.state({ otp })}
-                                />
+        <div style={{ display: 'flex', justifyContent: 'center' }} >
+            <div data-aos="fade-left">
+                <div style={{ width: '600px', textAlign: 'center', padding: '30px' }}>
+                    <Container>
+                        <h4>Please Enter the OTP to Verify your Account</h4>
+                        <div>A OTP (one time Password) has been sent to mail</div>
+                        <Box component="form" onSubmit={handleOTPSubmit} sx={{ mt: 3 }}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <OTPInput
+                                        autoFocus
+                                        isNumberInput
+                                        length={6}
+                                        className="otpContainer"
+                                        inputClassName="otpInput"
+                                        onChangeOTP={(otp) => setOTP(otp)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                    >Validate OTP</Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        color="primary"
+                                        endIcon={<SendIcon />}
+                                        onClick={() => props.sentEmail(props.state, props.state.school_email)}
+                                    >Resend OTP</Button>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                >Validate OTP</Button>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button
-                                    type="submit"
-                                    color="primary"
-                                    endIcon={<SendIcon />}
-                                >Resend OTP</Button>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Container>
+                        </Box>
+                    </Container>
+                </div>
             </div>
         </div>
     );

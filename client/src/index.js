@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import store from "./redux/store";
 
 import AlertsView from "./components/AlertsView";
-import error404 from "./screens/404";
+// import error404 from "./screens/404";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
