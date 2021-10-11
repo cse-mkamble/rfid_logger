@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-
+import { Avatar, Typography, Stepper, Step, StepLabel, Container, Paper, Box } from "@mui/material";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import Signup from "./Signup";
 import VerifySendMail from "./VerifySendMail";
 import VerifyOTP from "./VerifyOTP";
 
-const steps = ['Signup', 'VerifySendMail', 'VerifyOTP'];
+const steps = ['Form', 'Verify Mail', 'Verify OTP'];
 
 export default class Register extends Component {
 
@@ -21,6 +22,7 @@ export default class Register extends Component {
             country: '',
             password: '',
             confirm_password: '',
+            OTP: '',
             activeStep: 0
         };
     }
@@ -29,8 +31,16 @@ export default class Register extends Component {
 
     }
 
-    handleInputChange = event => {
+    handleSelectInputChange = (name, value) => {
+        this.setState({ [name]: value });
+    };
+
+    handleInputChange = (event) => {
         this.setState({ [event.target.name]: event.target.value });
+    };
+
+    handlePhoneInputChange = (phone) => {
+        this.setState({ school_phone: phone });
     };
 
     getStepContent(step) {
@@ -38,26 +48,37 @@ export default class Register extends Component {
             case 0:
                 return (
                     <Signup
-                        handleNext={this.handleSignUpNext}
+                        handleNext={this.handleNext}
                         state={this.state}
+                        handleSelectInputChange={this.handleSelectInputChange}
+                        handleInputChange={this.handleInputChange}
+                        handlePhoneInputChange={this.handlePhoneInputChange}
+                        handleSubmitSentMail={this.handleSubmitSentMail}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
             case 1:
                 return (
                     <VerifySendMail
-                        handleNext={this.handleVerifySendMailNext}
+                        handleNext={this.handleNext}
+                        handleBack={this.handleBack}
                         state={this.state}
-                        sentEmail={this.handleSentEmail}
+                        handleSelectInputChange={this.handleSelectInputChange}
+                        handleInputChange={this.handleInputChange}
+                        handleSubmitSentMail={this.handleSubmitSentMail}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
             case 2:
                 return (
                     <VerifyOTP
-                        handleNext={this.handleVerifyOTPNext}
+                        handleNext={this.handleNext}
+                        handleBack={this.handleBack}
                         state={this.state}
-                        sentEmail={this.handleSentEmail}
+                        handleSelectInputChange={this.handleSelectInputChange}
+                        handleInputChange={this.handleInputChange}
+                        handleSubmitSentMail={this.handleSubmitSentMail}
+                        handleSubmitVerifyOTP={this.handleSubmitVerifyOTP}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
@@ -66,16 +87,23 @@ export default class Register extends Component {
         }
     }
 
-    handleSignUpNext = (data) => {
+    handleBack = () => {
+        this.setState({ activeStep: this.state.activeStep - 1 });
+    };
+
+    handleNext = () => {
         this.setState({ activeStep: this.state.activeStep + 1 });
-        const { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = data;
-        this.setState({ owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password });
-        this.handleSentEmail(data, school_email)
+    };
+
+    handleSignUpNext2 = (data) => {
+        this.setState({ activeStep: this.state.activeStep + 1 });
+        const { school_phone, address, city, region, country, password, confirm_password } = data;
+        this.setState({ school_phone, address, city, region, country, password, confirm_password });
+        this.handleSentEmail(data, '')
     };
 
     handleVerifySendMailNext = (data) => {
         this.setState({ activeStep: this.state.activeStep + 1 });
-        this.setState({ school_email: data })
     };
 
     handleVerifyOTPNext = (data) => {
@@ -83,34 +111,52 @@ export default class Register extends Component {
         // console.log(data);
     };
 
-    handleSentEmail = (data, email) => {
-        console.log(data)
-        console.log(email)
+    handleSubmitSentMail = () => {
+        console.log(this.state)
+    }
+
+    handleSubmitVerifyOTP = () => {
+        console.log(this.state)
     }
 
     render() {
         return (
-            <div style={{ width: '100%', marginTop: '40px', padding: '20px', display: 'flex', justifyContent: 'center' }}>
-                <div className='bg-white rounded' style={{ width: '800px', border: '1px solid #dadce0' }}>
-                    <React.Fragment>
-                        {this.state.activeStep === steps.length ? (
-                            <React.Fragment>
-                                <div variant="h5" gutterBottom>
-                                    Thank you for your order.
-                                </div>
-                                <div variant="subtitle1">
-                                    Your order number is #2001539. We have emailed your order
-                                    confirmation, and will send you an update when your order has
-                                    shipped.
-                                </div>
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                {this.getStepContent(this.state.activeStep)}
-                            </React.Fragment>
-                        )}
-                    </React.Fragment>
-                </div>
+            <div>
+                <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
+                    <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                        <Box style={{ padding: '0 100px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'center' }} direction="row" spacing={2}>
+                                <Avatar sx={{ m: 1, bgcolor: 'primary.main' }} ><AccountCircleOutlinedIcon /></Avatar>
+                            </div>
+                            <Typography component="h1" variant="h4" align="center">Create your Account</Typography>
+                            <Stepper activeStep={this.state.activeStep} sx={{ pt: 3, pb: 5 }}>
+                                {steps.map((label) => (
+                                    <Step key={label}>
+                                        <StepLabel>{label}</StepLabel>
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </Box>
+                        <React.Fragment>
+                            {this.state.activeStep === steps.length ? (
+                                <React.Fragment>
+                                    <div variant="h5" gutterBottom>
+                                        Thank you for your order.
+                                    </div>
+                                    <div variant="subtitle1">
+                                        Your order number is #2001539. We have emailed your order
+                                        confirmation, and will send you an update when your order has
+                                        shipped.
+                                    </div>
+                                </React.Fragment>
+                            ) : (
+                                <React.Fragment>
+                                    {this.getStepContent(this.state.activeStep)}
+                                </React.Fragment>
+                            )}
+                        </React.Fragment>
+                    </Paper>
+                </Container>
             </div>
         )
     }

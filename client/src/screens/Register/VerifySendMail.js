@@ -8,7 +8,6 @@ const VerifySendMail = (props) => {
 
     AOS.init({});
 
-    const [school_email, setSchoolEmail] = useState(props.state.school_email);
     const [isSent, setIsSent] = useState(true);
     const [change_email, setChangeEmail] = useState(false);
 
@@ -18,8 +17,8 @@ const VerifySendMail = (props) => {
 
     const handleSentMail = (event) => {
         event.preventDefault();
-        if (school_email) {
-            props.sentEmail(props.state, school_email)
+        if (props.state.school_email) {
+            props.handleSubmitSentMail();
             setIsSent(true);
             props.handleAddSuccessMessage("Sent mail. Please check your mail.");
         } else {
@@ -28,7 +27,7 @@ const VerifySendMail = (props) => {
     };
 
     const changeEmailForm = () => (
-        <div style={{ padding: '0 60px' }}>
+        <div style={{ padding: '0 200px' }}>
             <Box component="form" onSubmit={handleSentMail} sx={{ mt: 3 }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -41,15 +40,16 @@ const VerifySendMail = (props) => {
                             label="School Email Address"
                             autoComplete="email"
                             autoFocus
-                            value={school_email}
-                            onChange={(e) => setSchoolEmail(e.target.value)}
+                            name='school_email'
+                            value={props.state.school_email}
+                            onChange={props.handleInputChange}
                         />
                     </Grid>
                 </Grid>
                 <Button
                     type="submit"
                     variant="contained"
-                    sx={{ mt: 2, mb: 2 }}
+                    sx={{ m: 2 }}
                     endIcon={<SendIcon />}
                 >Send</Button>
             </Box>
@@ -57,57 +57,56 @@ const VerifySendMail = (props) => {
     )
 
     return (
-        <div>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <div data-aos="fade-left">
-                    <div style={{ width: '600px', padding: '10px' }}>
-                        <div>
-                            <Container>
-                                <div style={{ display: 'flex', justifyContent: 'center', height: '160px' }} >
-                                    <img style={{ width: '240px' }} src="https://res.cloudinary.com/mayurkamble/image/upload/v1632983921/icon/ofxp8e2ghdiodfggfe8e.gif" alt='SentMail gif' />
-                                </div>
-                                <div style={{ textAlign: 'center' }}>
-                                    <h3>One-Time PIN</h3>
-                                    <div style={{ padding: '20px 40px' }} >
-                                        <div>6-digit code has been sent via message.</div>
-                                        <div>Please, check your mail.</div>
-                                    </div>
-                                    <div>
-                                        {!change_email ? (<div>
-                                            <div>Is this your mail?</div>
-                                            <h4>{school_email}</h4>
-                                            <Button color="primary" onClick={() => {
-                                                setIsSent(false)
-                                                setChangeEmail(true)
-                                            }} >Not your mail?</Button>
-                                        </div>) : (<div>
-                                            {changeEmailForm()}
-                                        </div>)}
-                                    </div>
-                                    <p style={{ color: '#ff00009e', fontSize: '14px', margin: '20px 0' }}>We encountered an error for your request. For transactions, please check your account before trying again.</p>
-                                    <Button
-                                        variant="contained"
-                                        color="error"
-                                        sx={{ mt: 2, mb: 2 }}
-                                        style={{ fontWeight: 'bold' }}
-                                        onClick={() => {
-                                            if (school_email) {
-                                                if (isSent) {
-                                                    props.handleNext(school_email);
-                                                } else {
-                                                    props.handleAddErrorMessages([{ msg: "Please, Click Sent Button." }]);
-                                                }
-                                            } else {
-                                                props.handleAddErrorMessages([{ msg: "Please enter your mail." }]);
-                                            }
-                                        }}
-                                    >Yes, Code has get in mail</Button>
-                                </div>
-                            </Container>
-                        </div>
-                    </div>
+        <div data-aos="fade-left">
+            <Container>
+                <div style={{ display: 'flex', justifyContent: 'center', height: '160px' }} >
+                    <img style={{ width: '240px' }} src="https://res.cloudinary.com/mayurkamble/image/upload/v1632983921/icon/ofxp8e2ghdiodfggfe8e.gif" alt='SentMail gif' />
                 </div>
-            </div>
+                <div style={{ textAlign: 'center' }}>
+                    <h3>One-Time PIN</h3>
+                    <div style={{ padding: '20px 40px' }} >
+                        <div>6-digit code has been sent via message.</div>
+                        <div>Please, check your mail.</div>
+                    </div>
+                    <div>
+                        {!change_email ? (<div>
+                            <div>Is this your mail?</div>
+                            <h4>{props.state.school_email}</h4>
+                            <Button color="primary" onClick={() => {
+                                setIsSent(false)
+                                setChangeEmail(true)
+                            }} >Not your mail?</Button>
+                        </div>) : (<div>
+                            {changeEmailForm()}
+                        </div>)}
+                    </div>
+                    <Grid container spacing={3} sx={{ mt: 4 }}>
+                        <Grid item xs={12} sm={6}>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                <Button variant="contained" onClick={props.handleBack} >Back</Button>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => {
+                                        if (props.state.school_email) {
+                                            if (isSent) {
+                                                props.handleNext();
+                                            } else {
+                                                props.handleAddErrorMessages([{ msg: "Please, Click Sent Button." }]);
+                                            }
+                                        } else {
+                                            props.handleAddErrorMessages([{ msg: "Please enter your mail." }]);
+                                        }
+                                    }}
+                                >Yes, Code has get in mail</Button>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Container>
         </div>
     );
 };

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Grid, Box, Typography, Container, MenuItem } from "@mui/material";
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { Button, CssBaseline, TextField, FormControlLabel, Checkbox, Grid, Box, Container, MenuItem } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -10,19 +9,9 @@ const Signup = (props) => {
 
     AOS.init({});
 
-    const [owner_name, setOwnerName] = useState(props.state.owner_name);
-    const [school_name, setSchoolName] = useState(props.state.school_name);
-    const [school_email, setSchoolEmail] = useState(props.state.school_email);
-    const [school_phone, setSchoolPhone] = useState(props.state.school_phone);
-    const [address, setAddress] = useState(props.state.address);
-    const [city, setCity] = useState(props.state.city);
-    const [region, setRegion] = useState(props.state.region);
-    const [country, setCountry] = useState(props.state.country);
     const [countryList, setCountryList] = useState([]);
     const [regionList, setRegionList] = useState([]);
     const [cityList, setCityList] = useState([]);
-    const [password, setPassword] = useState(props.state.password);
-    const [confirm_password, setConfirmPassword] = useState(props.state.confirm_password);
     const [error_confirm_password, setErrorConfirmPassword] = useState('');
     const [is_error_confirm_password, setIsErrorConfirmPassword] = useState(false);
     const [is_errors, setIsErrors] = useState(false);
@@ -31,20 +20,30 @@ const Signup = (props) => {
 
     useEffect(() => {
         setCountryList(CSCData);
+        if (props.state.country) {
+            const resultRegion = CSCData.filter(item => item.name === props.state.country);
+            const result2Region = resultRegion.map(item => item.states);
+            setRegionList(result2Region[0]);
+            const resultCities = result2Region[0].filter(item => item.name === props.state.region);
+            const result2Cities = resultCities.map(item => item.cities);
+            setCityList(result2Cities[0]);
+        }
+        props.handleSelectInputChange('password', '');
+        props.handleSelectInputChange('confirm_password', '');
     }, [])
 
     const handleFormValidation = () => {
         let errors = {};
         let formIsValid = true;
         // schoolPhone
-        if (!school_phone || school_phone.length < 4) {
+        if (!props.state.school_phone || props.state.school_phone.length < 4) {
             formIsValid = false;
             errors["school_phone"] = "Plese, fill in phone number filed.";
             setIsErrors(true)
         } else { setIsErrors(false) }
         // confirmPassword
-        if (password !== "undefined" && confirm_password !== "undefined") {
-            if (password !== confirm_password) {
+        if (props.state.password !== "undefined" && props.state.confirm_password !== "undefined") {
+            if (props.state.password !== props.state.confirm_password) {
                 formIsValid = false;
                 errors["confirm_password"] = "❗Confirm passwords didn’t match. Try again.";
             }
@@ -56,9 +55,9 @@ const Signup = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (handleFormValidation()) {
-            const user = { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password };
+            props.handleSubmitSentMail();
+            props.handleNext();
             props.handleAddSuccessMessage("Sent mail. Please check your mail.");
-            props.handleNext(user);
         } else {
             props.handleAddErrorMessages([{ msg: "Form has errors." }]);
         }
@@ -66,7 +65,7 @@ const Signup = (props) => {
 
     const handleCountryValue = (event) => {
         event.preventDefault();
-        setCountry(event.target.value)
+        props.handleInputChange(event)
         if (event.target.value) {
             const result = CSCData.filter(item => item.name === event.target.value);
             const result2 = result.map(item => item.states);
@@ -76,7 +75,7 @@ const Signup = (props) => {
 
     const handleRegionValue = (event) => {
         event.preventDefault();
-        setRegion(event.target.value)
+        props.handleInputChange(event)
         if (event.target.value) {
             const result = regionList.filter(item => item.name === event.target.value);
             const result2 = result.map(item => item.cities);
@@ -84,25 +83,13 @@ const Signup = (props) => {
         }
     }
 
-    const handleOnChangePhoneNumber = (value) => {
-        setSchoolPhone(value);
-    }
-
     return (
         <div>
             <div data-aos="fade-left">
                 <Container>
                     <CssBaseline />
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}><AccountCircleOutlinedIcon /></Avatar>
-                        <Typography component="h1" variant="h5">Create your Account</Typography>
-                        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }} >
+                        <Box component="form" onSubmit={handleSubmit}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12} sm={4}>
                                     <TextField
@@ -112,8 +99,9 @@ const Signup = (props) => {
                                         autoFocus
                                         size="small"
                                         label="Owner Full Name"
-                                        value={owner_name}
-                                        onChange={(e) => setOwnerName(e.target.value)}
+                                        name='owner_name'
+                                        value={props.state.owner_name}
+                                        onChange={props.handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={8}>
@@ -123,8 +111,9 @@ const Signup = (props) => {
                                         fullWidth
                                         size="small"
                                         label="School Name"
-                                        value={school_name}
-                                        onChange={(e) => setSchoolName(e.target.value)}
+                                        name='school_name'
+                                        value={props.state.school_name}
+                                        onChange={props.handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -135,8 +124,9 @@ const Signup = (props) => {
                                         size="small"
                                         label="School Email Address"
                                         autoComplete="email"
-                                        value={school_email}
-                                        onChange={(e) => setSchoolEmail(e.target.value)}
+                                        name='school_email'
+                                        value={props.state.school_email}
+                                        onChange={props.handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6} >
@@ -149,10 +139,10 @@ const Signup = (props) => {
                                         data-cy="user-phone"
                                         defaultCountry={"in"}
                                         error={is_errors}
-                                        value={school_phone}
+                                        name='school_phone'
+                                        value={props.state.school_phone}
                                         helperText={errors['school_phone']}
-                                        // onChange={(event) => setSchoolPhone(event.target.value)}
-                                        onChange={handleOnChangePhoneNumber}
+                                        onChange={(value) => props.handlePhoneInputChange(value)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -162,8 +152,9 @@ const Signup = (props) => {
                                         fullWidth
                                         size="small"
                                         label="Address"
-                                        value={address}
-                                        onChange={(e) => setAddress(e.target.value)}
+                                        name='address'
+                                        value={props.state.address}
+                                        onChange={props.handleInputChange}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={4} >
@@ -173,7 +164,8 @@ const Signup = (props) => {
                                         fullWidth
                                         size="small"
                                         label="Country"
-                                        value={country}
+                                        name='country'
+                                        value={props.state.country}
                                         onChange={(event) => handleCountryValue(event)}
                                     >
                                         {countryList.map((option) => (
@@ -190,9 +182,9 @@ const Signup = (props) => {
                                         fullWidth
                                         size="small"
                                         label="State/Province/Region"
-                                        value={region}
+                                        name='region'
+                                        value={props.state.region}
                                         onChange={(event) => handleRegionValue(event)}
-                                    // helperText="Please select your region"
                                     >
                                         {regionList.map((option) => (
                                             <MenuItem key={option.name} value={option.name}>
@@ -209,9 +201,9 @@ const Signup = (props) => {
                                         fullWidth
                                         size="small"
                                         label="Town/City"
-                                        value={city}
-                                        onChange={(event) => setCity(event.target.value)}
-                                    // helperText="Please select your city"
+                                        name='city'
+                                        value={props.state.city}
+                                        onChange={props.handleInputChange}
                                     >
                                         {cityList.map((option) => (
                                             <MenuItem key={option.name} value={option.name}>
@@ -229,8 +221,11 @@ const Signup = (props) => {
                                         type={show_password}
                                         inputProps={{ minLength: 6 }}
                                         autoComplete="new-password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        name='password'
+                                        value={props.state.password}
+                                        onChange={(event) => {
+                                            props.handleInputChange(event)
+                                        }}
                                         helperText="Use 6 or more characters with a mix of letters, numbers & symbols"
                                     />
                                 </Grid>
@@ -245,12 +240,13 @@ const Signup = (props) => {
                                         autoComplete="new-password"
                                         helperText={error_confirm_password}
                                         error={is_error_confirm_password}
-                                        value={confirm_password}
+                                        name='confirm_password'
+                                        value={props.state.confirm_password}
                                         onChange={(event) => {
-                                            setConfirmPassword(event.target.value)
+                                            props.handleInputChange(event)
                                             if (event.target.value) {
-                                                if (event.target.value !== password) {
-                                                    setErrorConfirmPassword('❗Those passwords didn’t match. Try again.');
+                                                if (event.target.value !== props.state.password) {
+                                                    setErrorConfirmPassword('❗Those passwords didn’t match.');
                                                     setIsErrorConfirmPassword(true);
                                                 } else {
                                                     setErrorConfirmPassword('');
@@ -266,15 +262,19 @@ const Signup = (props) => {
                                         label="Show Password"
                                     />
                                 </Grid>
-                            </Grid>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 2, mb: 2 }}
-                            >Submit</Button>
-                            <Grid sx={{ m: 2 }} container justifyContent="center">
-                                <Grid item>Already have an account? <Link href="/signin">Sign in</Link></Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                        <Button href="/signin">Sign in instead</Button>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                        >Next</Button>
+                                    </Box>
+                                </Grid>
                             </Grid>
                         </Box>
                     </Box>

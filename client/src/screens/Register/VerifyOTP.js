@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Grid, Box, Container } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import AOS from 'aos';
@@ -9,12 +9,11 @@ const VerifyOTP = (props) => {
 
     AOS.init({});
 
-    const [OTP, setOTP] = useState('');
-
     const handleOTPSubmit = (event) => {
         event.preventDefault();
-        if (OTP && OTP.length === 6) {
-            props.handleNext(OTP);
+        if (props.state.OTP && props.state.OTP.length === 6) {
+            props.handleSubmitVerifyOTP();
+            props.handleNext();
         } else {
             props.handleAddErrorMessages([{ msg: "The OTP you entered is invalid. Please enter the correct OTP." }]);
         }
@@ -23,11 +22,11 @@ const VerifyOTP = (props) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center' }} >
             <div data-aos="fade-left">
-                <div style={{ width: '600px', textAlign: 'center', padding: '30px' }}>
+                <div style={{ textAlign: 'center' }}>
                     <Container>
                         <h4>Please Enter the OTP to Verify your Account</h4>
                         <div>A OTP (one time Password) has been sent to mail</div>
-                        <Box component="form" onSubmit={handleOTPSubmit} sx={{ mt: 3 }}>
+                        <Box component="form" onSubmit={handleOTPSubmit} sx={{ mt: 2 }}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <OTPInput
@@ -36,7 +35,8 @@ const VerifyOTP = (props) => {
                                         length={6}
                                         className="otpContainer"
                                         inputClassName="otpInput"
-                                        onChangeOTP={(otp) => setOTP(otp)}
+                                        name='OTP'
+                                        onChangeOTP={(otp) => props.handleSelectInputChange('OTP', otp)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -49,8 +49,13 @@ const VerifyOTP = (props) => {
                                     <Button
                                         color="primary"
                                         endIcon={<SendIcon />}
-                                        onClick={() => props.sentEmail(props.state, props.state.school_email)}
+                                        onClick={() => props.handleSubmitSentMail()}
                                     >Resend OTP</Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                        <Button variant="contained" onClick={props.handleBack} >Back</Button>
+                                    </Box>
                                 </Grid>
                             </Grid>
                         </Box>
