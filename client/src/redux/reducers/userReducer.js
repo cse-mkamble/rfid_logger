@@ -1,6 +1,10 @@
 import { constants } from "../constants"
 
-export const registerUserSendMailReducer = (state = {}, action) => {
+export const registerUserSendMailReducer = (state = {
+    loading: false,
+    success: false,
+    error: ''
+}, action) => {
     switch (action.type) {
         case constants.USER_REGISTER_SEND_MAIL_REQUEST:
             return {

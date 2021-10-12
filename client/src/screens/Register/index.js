@@ -1,13 +1,17 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux';
 import { Avatar, Typography, Stepper, Step, StepLabel, Container, Paper, Box } from "@mui/material";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import Signup from "./Signup";
 import VerifySendMail from "./VerifySendMail";
 import VerifyOTP from "./VerifyOTP";
+import { registerSendMailAction } from '../../redux/actions'
 
 const steps = ['Form', 'Verify Mail', 'Verify OTP'];
 
-export default class Register extends Component {
+class Register extends Component {
 
     constructor(props) {
         super(props);
@@ -53,7 +57,7 @@ export default class Register extends Component {
                         handleSelectInputChange={this.handleSelectInputChange}
                         handleInputChange={this.handleInputChange}
                         handlePhoneInputChange={this.handlePhoneInputChange}
-                        handleSubmitSentMail={this.handleSubmitSentMail}
+                        handleSubmitSendMail={this.handleSubmitSendMail}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
@@ -65,7 +69,7 @@ export default class Register extends Component {
                         state={this.state}
                         handleSelectInputChange={this.handleSelectInputChange}
                         handleInputChange={this.handleInputChange}
-                        handleSubmitSentMail={this.handleSubmitSentMail}
+                        handleSubmitSendMail={this.handleSubmitSendMail}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
                 );
@@ -77,7 +81,7 @@ export default class Register extends Component {
                         state={this.state}
                         handleSelectInputChange={this.handleSelectInputChange}
                         handleInputChange={this.handleInputChange}
-                        handleSubmitSentMail={this.handleSubmitSentMail}
+                        handleSubmitSendMail={this.handleSubmitSendMail}
                         handleSubmitVerifyOTP={this.handleSubmitVerifyOTP}
                         handleAddErrorMessages={this.props.handleAddErrorMessages}
                         handleAddSuccessMessage={this.props.handleAddSuccessMessage} />
@@ -95,24 +99,11 @@ export default class Register extends Component {
         this.setState({ activeStep: this.state.activeStep + 1 });
     };
 
-    handleSignUpNext2 = (data) => {
-        this.setState({ activeStep: this.state.activeStep + 1 });
-        const { school_phone, address, city, region, country, password, confirm_password } = data;
-        this.setState({ school_phone, address, city, region, country, password, confirm_password });
-        this.handleSentEmail(data, '')
-    };
-
-    handleVerifySendMailNext = (data) => {
-        this.setState({ activeStep: this.state.activeStep + 1 });
-    };
-
-    handleVerifyOTPNext = (data) => {
-        this.setState({ activeStep: this.state.activeStep + 1 });
-        // console.log(data);
-    };
-
-    handleSubmitSentMail = () => {
-        console.log(this.state)
+    handleSubmitSendMail = async () => {
+        const { success, error } = await this.props.registerSendMailAction(this.state);
+        if (error) return this.props.handleAddErrorMessages([{ msg: error }]);
+        this.handleNext();
+        this.props.handleAddSuccessMessage("Sent mail. Please check your mail.");
     }
 
     handleSubmitVerifyOTP = () => {
@@ -161,3 +152,16 @@ export default class Register extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    registerUserSendMailReducerState: state.registerUserSendMailReducer
+});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+    registerSendMailAction,
+}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(Register));

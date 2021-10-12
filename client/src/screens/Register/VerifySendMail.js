@@ -15,10 +15,10 @@ const VerifySendMail = (props) => {
 
     }, []);
 
-    const handleSentMail = (event) => {
+    const handleSendMail = (event) => {
         event.preventDefault();
         if (props.state.school_email) {
-            props.handleSubmitSentMail();
+            props.handleSubmitSendMail();
             setIsSent(true);
             props.handleAddSuccessMessage("Sent mail. Please check your mail.");
         } else {
@@ -28,7 +28,7 @@ const VerifySendMail = (props) => {
 
     const changeEmailForm = () => (
         <div style={{ padding: '0 200px' }}>
-            <Box component="form" onSubmit={handleSentMail} sx={{ mt: 3 }}>
+            <Box component="form" onSubmit={handleSendMail} sx={{ mt: 3 }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <TextField

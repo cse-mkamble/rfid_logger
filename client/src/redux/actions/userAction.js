@@ -1,25 +1,28 @@
 import axios from "axios"
 import { constants } from "../constants"
 
-export const registerSendMail = (user, props) => {
-    // const { school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = user;
-    const { handleAddErrorMessages, handleAddSuccessMessage } = props;
-    return async (dispatch) => {
-        dispatch({ type: constants.USER_REGISTER_SEND_MAIL_REQUEST });
-        try {
-            // const response = await axios.post(`/api/v1/users/register`, { school_name, school_email, school_phone, address, city, region, country, password, confirm_password });
-            dispatch({ type: constants.USER_REGISTER_SEND_MAIL_SUCCESS });
-            // setState({ stage: 'verifyotpalert' });
-            handleAddSuccessMessage("Sent mail. Please check your mail.");
-        } catch (error) {
-            if (error.response) {
-                dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: error.response.data.errors })
-                handleAddErrorMessages([{ msg: error.response.data.errors }]);
-            } else {
-                dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: "Frontend: Something went wrong." })
-                handleAddErrorMessages([{ msg: `Frontend: Something went wrong. ${error}` }]);
-            }
+export const registerSendMailAction = (data) => async (dispatch) => {
+    const { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = data;
+    let state = [];
+    let success = false;
+    let errorMessage = '';
+    dispatch({ type: constants.USER_REGISTER_SEND_MAIL_REQUEST });
+    try {
+        // const response = await axios.post(`/api/v1/users/register`, { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password });
+        dispatch({ type: constants.USER_REGISTER_SEND_MAIL_SUCCESS });
+        success = true;
+    } catch (error) {
+        if (error.response) {
+            dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: error.response.data.errors })
+            errorMessage = error.response.data.errors;
+        } else {
+            dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: "Somthing went wrong!" })
+            errorMessage = "Somthing went wrong!";
         }
+    }
+    return state = {
+        success: success,
+        error: errorMessage
     }
 }
 

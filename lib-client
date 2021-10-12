@@ -20,3 +20,5 @@ npm install --save react-bs-notifier
 npm install @mui/material @emotion/react @emotion/styled
 npm install @mui/material @mui/styled-engine-sc styled-components
 npm install @mui/icons-material
+
+npm install --save react-helmet

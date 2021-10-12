@@ -49,7 +49,7 @@ const VerifyOTP = (props) => {
                                     <Button
                                         color="primary"
                                         endIcon={<SendIcon />}
-                                        onClick={() => props.handleSubmitSentMail()}
+                                        onClick={() => props.handleSubmitSendMail()}
                                     >Resend OTP</Button>
                                 </Grid>
                                 <Grid item xs={12}>

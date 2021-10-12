@@ -52,12 +52,10 @@ const Signup = (props) => {
         return formIsValid;
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmitSignup = (event) => {
         event.preventDefault();
         if (handleFormValidation()) {
-            props.handleSubmitSentMail();
-            props.handleNext();
-            props.handleAddSuccessMessage("Sent mail. Please check your mail.");
+            props.handleSubmitSendMail();
         } else {
             props.handleAddErrorMessages([{ msg: "Form has errors." }]);
         }
@@ -89,7 +87,7 @@ const Signup = (props) => {
                 <Container>
                     <CssBaseline />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }} >
-                        <Box component="form" onSubmit={handleSubmit}>
+                        <Box component="form" onSubmit={handleSubmitSignup}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12} sm={4}>
                                     <TextField
