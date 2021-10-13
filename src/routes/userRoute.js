@@ -7,7 +7,7 @@ const awaitHandlerFactory = require('../middleware/awaitHandlerFactoryMiddleware
 
 const { createUserSchema, updateUserSchema, validateLogin } = require('../middleware/validators/userValidatorMiddleware');
 
-router.get('/', auth(), awaitHandlerFactory(userController.getAllUsers)); // localhost:3000/api/v1/users
+// router.get('/', auth(), awaitHandlerFactory(userController.getAllUsers)); // localhost:3000/api/v1/users
 
 // router.get('/', auth(), awaitHandlerFactory(userController.getAllUsers)); // localhost:3000/api/v1/users
 // router.get('/id/:id', auth(), awaitHandlerFactory(userController.getUserById)); // localhost:3000/api/v1/users/id/1
@@ -18,5 +18,11 @@ router.get('/', auth(), awaitHandlerFactory(userController.getAllUsers)); // loc
 // router.delete('/id/:id', auth(Role.Admin), awaitHandlerFactory(userController.deleteUser)); // localhost:3000/api/v1/users/id/1
 
 // router.post('/login', validateLogin, awaitHandlerFactory(userController.userLogin)); // localhost:3000/api/v1/users/login
+
+// School User
+// http://localhost:3000/api/v1/users/school/registersendmail
+router.post('/school/registersendmail', createUserSchema, awaitHandlerFactory(userController.registerSendMail));
+
+
 
 module.exports = router;

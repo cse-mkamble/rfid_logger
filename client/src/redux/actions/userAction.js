@@ -8,7 +8,8 @@ export const registerSendMailAction = (data) => async (dispatch) => {
     let errorMessage = '';
     dispatch({ type: constants.USER_REGISTER_SEND_MAIL_REQUEST });
     try {
-        // const response = await axios.post(`/api/v1/users/register`, { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password });
+        const response = await axios.post(`/api/v1/users/school/registersendmail`, { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password });
+        console.log(response)
         dispatch({ type: constants.USER_REGISTER_SEND_MAIL_SUCCESS });
         success = true;
     } catch (error) {

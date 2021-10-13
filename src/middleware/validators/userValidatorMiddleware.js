@@ -3,51 +3,49 @@ const Role = require('../../utils/userRolesUtils');
 
 
 exports.createUserSchema = [
-    body('username')
+    body('school_name')
         .exists()
-        .withMessage('username is required')
-        .isLength({ min: 3 })
-        .withMessage('Must be at least 3 chars long'),
-    body('first_name')
+        .withMessage('School name is required')
+        .notEmpty(),
+    body('owner_name')
         .exists()
-        .withMessage('Your first name is required')
-        .isAlpha()
-        .withMessage('Must be only alphabetical chars')
-        .isLength({ min: 3 })
-        .withMessage('Must be at least 3 chars long'),
-    body('last_name')
+        .withMessage('Owner name is required'),
+    body('school_phone')
         .exists()
-        .withMessage('Your last name is required')
-        .isAlpha()
-        .withMessage('Must be only alphabetical chars')
-        .isLength({ min: 3 })
-        .withMessage('Must be at least 3 chars long'),
-    body('email')
+        .withMessage('School phone is required')
+        .notEmpty()
+        .isNumeric()
+        .withMessage('Must be a number'),
+    body('school_email')
         .exists()
-        .withMessage('Email is required')
+        .withMessage('School email is required')
+        .notEmpty()
         .isEmail()
         .withMessage('Must be a valid email')
         .normalizeEmail(),
-    body('role')
-        .optional()
-        .isIn([Role.Admin, Role.SuperUser])
-        .withMessage('Invalid Role type'),
+    body('address')
+        .exists()
+        .withMessage('Address is required'),
+    body('city')
+        .exists()
+        .withMessage('City is required'),
+    body('region')
+        .exists()
+        .withMessage('Region is required'),
+    body('country')
+        .exists()
+        .withMessage('Country is required'),
     body('password')
         .exists()
         .withMessage('Password is required')
         .notEmpty()
         .isLength({ min: 6 })
-        .withMessage('Password must contain at least 6 characters')
-        .isLength({ max: 10 })
-        .withMessage('Password can contain max 10 characters'),
+        .withMessage('Password must contain at least 6 characters'),
     body('confirm_password')
         .exists()
+        .withMessage('Confirm Password is required')
         .custom((value, { req }) => value === req.body.password)
-        .withMessage('confirm_password field must have the same value as the password field'),
-    body('age')
-        .optional()
-        .isNumeric()
-        .withMessage('Must be a number')
+        .withMessage('confirm_password field must have the same value as the password field')
 ];
 
 exports.updateUserSchema = [

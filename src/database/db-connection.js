@@ -1,14 +1,13 @@
-const dotenv = require('dotenv');
-dotenv.config();
-const mysql2 = require('mysql2');
+require("dotenv").config();
+const mysql = require('mysql2');
 
-class DBConnection {
+class databaseConnection {
     constructor() {
-        this.db = mysql2.createPool({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-            database: process.env.DB_DATABASE
+        this.db = mysql.createPool({
+            host: process.env.DATABASEHOST,
+            user: process.env.DATABASEUSER,
+            password: process.env.DATABASEPASSWORD,
+            database: process.env.DATABASENAME
         });
 
         this.checkConnection();
@@ -62,4 +61,4 @@ const HttpStatusCodes = Object.freeze({
 });
 
 
-module.exports = new DBConnection().query;
+module.exports = new databaseConnection().query;
