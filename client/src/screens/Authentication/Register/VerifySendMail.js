@@ -8,53 +8,18 @@ const VerifySendMail = (props) => {
 
     AOS.init({});
 
-    const [isSent, setIsSent] = useState(true);
-    const [change_email, setChangeEmail] = useState(false);
-
     useEffect(() => {
-
+        props.handleSelectInputChange('isSend', false);
     }, []);
 
     const handleSendMail = (event) => {
         event.preventDefault();
         if (props.state.school_email) {
             props.handleSubmitSendMail();
-            setIsSent(true);
-            props.handleAddSuccessMessage("Sent mail. Please check your mail.");
         } else {
             props.handleAddErrorMessages([{ msg: "Please enter your mail." }]);
         }
     };
-
-    const changeEmailForm = () => (
-        <div style={{ padding: '0 200px' }}>
-            <Box component="form" onSubmit={handleSendMail} sx={{ mt: 3 }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            fullWidth
-                            variant="standard"
-                            type="email"
-                            size="small"
-                            label="School Email Address"
-                            autoComplete="email"
-                            autoFocus
-                            name='school_email'
-                            value={props.state.school_email}
-                            onChange={props.handleInputChange}
-                        />
-                    </Grid>
-                </Grid>
-                <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{ m: 2 }}
-                    endIcon={<SendIcon />}
-                >Send</Button>
-            </Box>
-        </div>
-    )
 
     return (
         <div data-aos="fade-left">
@@ -65,20 +30,36 @@ const VerifySendMail = (props) => {
                 <div style={{ textAlign: 'center' }}>
                     <h3>One-Time PIN</h3>
                     <div style={{ padding: '20px 40px' }} >
-                        <div>6-digit code has been sent via message.</div>
-                        <div>Please, check your mail.</div>
+                        <div>6-digit code has been send via message.</div>
                     </div>
                     <div>
-                        {!change_email ? (<div>
-                            <div>Is this your mail?</div>
-                            <h4>{props.state.school_email}</h4>
-                            <Button color="primary" onClick={() => {
-                                setIsSent(false)
-                                setChangeEmail(true)
-                            }} >Not your mail?</Button>
-                        </div>) : (<div>
-                            {changeEmailForm()}
-                        </div>)}
+                        <div style={{ padding: '0 200px' }}>
+                            <Box component="form" onSubmit={handleSendMail} sx={{ mt: 3 }}>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            variant="standard"
+                                            type="email"
+                                            size="small"
+                                            label="Please enter school email address"
+                                            autoComplete="email"
+                                            autoFocus
+                                            name='school_email'
+                                            value={props.state.school_email}
+                                            onChange={props.handleInputChange}
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    sx={{ m: 2 }}
+                                    endIcon={<SendIcon />}
+                                >Send</Button>
+                            </Box>
+                        </div>
                     </div>
                     <Grid container spacing={3} sx={{ mt: 4 }}>
                         <Grid item xs={12} sm={6}>
@@ -92,10 +73,10 @@ const VerifySendMail = (props) => {
                                     variant="contained"
                                     onClick={() => {
                                         if (props.state.school_email) {
-                                            if (isSent) {
+                                            if (props.state.isSend) {
                                                 props.handleNext();
                                             } else {
-                                                props.handleAddErrorMessages([{ msg: "Please, Click Sent Button." }]);
+                                                props.handleAddErrorMessages([{ msg: "Please, Click Send Button." }]);
                                             }
                                         } else {
                                             props.handleAddErrorMessages([{ msg: "Please enter your mail." }]);

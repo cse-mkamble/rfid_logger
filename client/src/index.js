@@ -8,8 +8,8 @@ import store from "./redux/store";
 import AlertsView from "./components/AlertsView";
 // import error404 from "./screens/404";
 import Home from "./screens/Home";
-import Login from "./screens/Login";
-import Register from "./screens/Register";
+import Login from "./screens/Authentication/Login";
+import Register from "./screens/Authentication/Register";
 import Test from "./screens/Test";
 import './index.css';
 

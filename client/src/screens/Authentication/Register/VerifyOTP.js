@@ -3,7 +3,7 @@ import { Button, Grid, Box, Container } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import OTPInput from "../../components/UI/OTPInput";
+import OTPInput from "../../../components/UI/OTPInput";
 
 const VerifyOTP = (props) => {
 
@@ -13,7 +13,6 @@ const VerifyOTP = (props) => {
         event.preventDefault();
         if (props.state.OTP && props.state.OTP.length === 6) {
             props.handleSubmitVerifyOTP();
-            props.handleNext();
         } else {
             props.handleAddErrorMessages([{ msg: "The OTP you entered is invalid. Please enter the correct OTP." }]);
         }

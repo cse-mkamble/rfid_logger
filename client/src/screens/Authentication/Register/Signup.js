@@ -3,7 +3,7 @@ import { Button, CssBaseline, TextField, FormControlLabel, Checkbox, Grid, Box, 
 import MuiPhoneNumber from "material-ui-phone-number";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import CSCData from "../../countries_states_cities";
+import CSCData from "../../../countries_states_cities.json";
 
 const Signup = (props) => {
 
@@ -55,7 +55,7 @@ const Signup = (props) => {
     const handleSubmitSignup = (event) => {
         event.preventDefault();
         if (handleFormValidation()) {
-            props.handleSubmitSendMail();
+            props.handleNext();
         } else {
             props.handleAddErrorMessages([{ msg: "Form has errors." }]);
         }
@@ -89,24 +89,13 @@ const Signup = (props) => {
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }} >
                         <Box component="form" onSubmit={handleSubmitSignup}>
                             <Grid container spacing={3}>
-                                <Grid item xs={12} sm={4}>
-                                    <TextField
-                                        autoComplete="ownerName"
-                                        required
-                                        fullWidth
-                                        autoFocus
-                                        size="small"
-                                        label="Owner Full Name"
-                                        name='owner_name'
-                                        value={props.state.owner_name}
-                                        onChange={props.handleInputChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={8}>
+
+                                <Grid item xs={12}>
                                     <TextField
                                         autoComplete="schoolName"
                                         required
                                         fullWidth
+                                        autoFocus
                                         size="small"
                                         label="School Name"
                                         name='school_name'
@@ -116,14 +105,13 @@ const Signup = (props) => {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
+                                        autoComplete="ownerName"
                                         required
                                         fullWidth
-                                        type="email"
                                         size="small"
-                                        label="School Email Address"
-                                        autoComplete="email"
-                                        name='school_email'
-                                        value={props.state.school_email}
+                                        label="Owner Full Name"
+                                        name='owner_name'
+                                        value={props.state.owner_name}
                                         onChange={props.handleInputChange}
                                     />
                                 </Grid>

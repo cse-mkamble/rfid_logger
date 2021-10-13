@@ -7,7 +7,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import Signup from "./Signup";
 import VerifySendMail from "./VerifySendMail";
 import VerifyOTP from "./VerifyOTP";
-import { registerSendMailAction } from '../../redux/actions'
+import { registerSendMailAction } from '../../../redux/actions'
 
 const steps = ['Form', 'Verify Mail', 'Verify OTP'];
 
@@ -26,6 +26,7 @@ class Register extends Component {
             country: '',
             password: '',
             confirm_password: '',
+            isSend: false,
             OTP: '',
             activeStep: 0
         };
@@ -102,12 +103,13 @@ class Register extends Component {
     handleSubmitSendMail = async () => {
         const { success, error } = await this.props.registerSendMailAction(this.state);
         if (error) return this.props.handleAddErrorMessages([{ msg: error }]);
-        this.handleNext();
+        this.setState({ isSend: true })
         this.props.handleAddSuccessMessage("Sent mail. Please check your mail.");
     }
 
     handleSubmitVerifyOTP = () => {
         console.log(this.state)
+        this.handleNext();
     }
 
     render() {
