@@ -3,7 +3,7 @@ const { multipleColumnSet } = require('../utils/commonUtils');
 const Role = require('../utils/userRolesUtils');
 
 class UserModel {
-    tableName = 'user';
+    tableName = 'school';
 
     find = async (params = {}) => {
         let sql = `SELECT * FROM ${this.tableName}`;
