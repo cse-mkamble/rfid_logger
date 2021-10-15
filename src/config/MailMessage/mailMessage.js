@@ -20,7 +20,9 @@ module.exports = mailMessage = (mailBody) => {
                     </div>
                     <br />
                     <div style="text-align: center; color: white; ">
-                        <div>If you encounter any problem, please contact us at <strong>${process.env.CONTACT_US}</strong> </div>
+                        <div>If you encounter any problem, please contact us at <strong><a href="mailto:${process.env.CONTACT_US}" target="_blank" style="
+                        color: white;
+                    ">${process.env.CONTACT_US}</a></strong> </div>
                         <br />
                         <div>©2021 ${process.env.APP_NAME}. All rights reserved.</div>
                         <div style="text-align: end; color: white; margin: 20px; font-size: 10px;">${Date.now()}</div>

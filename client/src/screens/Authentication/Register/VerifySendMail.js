@@ -61,6 +61,9 @@ const VerifySendMail = (props) => {
                             </Box>
                         </div>
                     </div>
+                    <div style={{ color: 'red' }} >
+                        <div>If didn't get email then click again on send button.</div>
+                    </div>
                     <Grid container spacing={3} sx={{ mt: 4 }}>
                         <Grid item xs={12} sm={6}>
                             <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>

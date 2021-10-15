@@ -101,10 +101,12 @@ class Register extends Component {
     };
 
     handleSubmitSendMail = async () => {
-        const { success, error } = await this.props.registerSendMailAction(this.state);
+        const { success, error, message } = await this.props.registerSendMailAction(this.state);
         if (error) return this.props.handleAddErrorMessages([{ msg: error }]);
-        this.setState({ isSend: true })
-        this.props.handleAddSuccessMessage("Sent mail. Please check your mail.");
+        if (success) {
+            this.setState({ isSend: true })
+            return this.props.handleAddSuccessMessage(message);
+        }
     }
 
     handleSubmitVerifyOTP = () => {

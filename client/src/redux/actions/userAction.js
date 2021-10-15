@@ -5,17 +5,18 @@ export const registerSendMailAction = (data) => async (dispatch) => {
     const { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password } = data;
     let state = [];
     let success = false;
+    let message = '';
     let errorMessage = '';
     dispatch({ type: constants.USER_REGISTER_SEND_MAIL_REQUEST });
     try {
         const response = await axios.post(`/api/v1/users/school/registersendmail`, { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password });
-        console.log(response)
-        dispatch({ type: constants.USER_REGISTER_SEND_MAIL_SUCCESS });
-        success = true;
+        dispatch({ type: constants.USER_REGISTER_SEND_MAIL_SUCCESS, payload: response.data.success, payload: response.data.message });
+        success = response.data.success;
+        message = response.data.message;
     } catch (error) {
         if (error.response) {
-            dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: error.response.data.errors })
-            errorMessage = error.response.data.errors;
+            dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: error.response.data.errors[0].message })
+            errorMessage = error.response.data.errors[0].message;
         } else {
             dispatch({ type: constants.USER_REGISTER_SEND_MAIL_FAILED, payload: "Somthing went wrong!" })
             errorMessage = "Somthing went wrong!";
@@ -23,7 +24,8 @@ export const registerSendMailAction = (data) => async (dispatch) => {
     }
     return state = {
         success: success,
-        error: errorMessage
+        error: errorMessage,
+        message: message
     }
 }
 
