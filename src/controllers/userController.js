@@ -55,6 +55,54 @@ class UserController {
         }
     }
 
+    registerVerifyOTP = async (request, response, next) => {
+        this.checkValidation(request.body);
+        try {
+            const { owner_name, school_name, school_email, school_phone, address, city, region, country, password, OTP } = request.body;
+            const schoolUserExists = await UserModel.findOne({ school_email });
+
+            if (schoolUserExists) return response.status(400).json({
+                success: false,
+                errors: [{ message: "User already exists. Please login." }]
+            });
+
+            try {
+                const isValid = otplibAuthenticator.verify({
+                    token: otp,
+                    secret: school_email
+                });
+    
+                if (!isValid) {
+                    return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+                        success: false,
+                        errors: [{ msg: "Invalid OTP. Please check OTP and try again." }]
+                    });
+                }
+
+                return response.status(200).json({
+                    success: true,
+                    message: "OTP Verifed Successfully."
+                });
+
+            } catch (error) {
+                console.log(error);
+                return res.status(500).json({
+                    success: false,
+                    errors: [{ message: "Internal server error" }]
+                });
+            }
+            
+
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                success: false,
+                errors: [{ message: "Internal server error" }]
+            });
+        }
+    }
+
     // await this.hashPassword(req);
     // const result = await UserModel.create(req.body);
     // if (!result) throw new HttpException(500, 'Something went wrong');
@@ -158,7 +206,7 @@ class UserController {
         }
     };
 
-    verifyOtp = async (req, res) => {
+    xxxverifyOtp = async (req, res) => {
         try {
             const errors = validationResult(req);
 

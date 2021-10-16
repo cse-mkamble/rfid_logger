@@ -29,16 +29,31 @@ export const registerSendMailAction = (data) => async (dispatch) => {
     }
 }
 
-export const register = (user) => {
-    return dispatch => {
-        dispatch({ type: constants.USER_REGISTER_REQUEST })
-        try {
-            console.log(user)
-            // const response = await axios.post(`/api/v1/users/register`, { school_name: schoolName, school_email: schoolEmail, school_phone: schoolPhone, address, city, region, country, password, confirm_password: confirmPassword })
-            dispatch({ type: constants.USER_REGISTER_SUCCESS })
-        } catch (error) {
-            dispatch({ type: constants.USER_REGISTER_FAILED, payload: error })
+export const registerVerifyOTPAction = (data) => async (dispatch) => {
+    const { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password, OTP } = data;
+    let state = [];
+    let success = false;
+    let message = '';
+    let errorMessage = '';
+    dispatch({ type: constants.USER_REGISTER_VERIFY_OTP_REQUEST });
+    try {
+        const response = await axios.post(`/api/v1/users/school/registerverifyotp`, { owner_name, school_name, school_email, school_phone, address, city, region, country, password, confirm_password, OTP });
+        dispatch({ type: constants.USER_REGISTER_VERIFY_OTP_SUCCESS, payload: response.data.success, payload: response.data.message });
+        success = response.data.success;
+        message = response.data.message;
+    } catch (error) {
+        if (error.response) {
+            dispatch({ type: constants.USER_REGISTER_VERIFY_OTP_FAILED, payload: error.response.data.errors[0].message })
+            errorMessage = error.response.data.errors[0].message;
+        } else {
+            dispatch({ type: constants.USER_REGISTER_VERIFY_OTP_FAILED, payload: "Somthing went wrong!" })
+            errorMessage = "Somthing went wrong!";
         }
+    }
+    return state = {
+        success: success,
+        error: errorMessage,
+        message: message
     }
 }
 

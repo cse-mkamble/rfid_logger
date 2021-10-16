@@ -20,9 +20,11 @@ const { createUserSchema, updateUserSchema, validateLogin } = require('../middle
 // router.post('/login', validateLogin, awaitHandlerFactory(userController.userLogin)); // localhost:3000/api/v1/users/login
 
 // School User
+
 // http://localhost:3000/api/v1/users/school/registersendmail
 router.post('/school/registersendmail', createUserSchema, awaitHandlerFactory(userController.registerSendMail));
 
-
+// http://localhost:3000/api/v1/users/school/registerverifyotp
+router.post('/school/registerverifyotp', createUserSchema, awaitHandlerFactory(userController.registerVerifyOTP));
 
 module.exports = router;

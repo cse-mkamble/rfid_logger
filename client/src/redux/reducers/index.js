@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
-import { registerUserSendMailReducer, registerUserReducer } from "./userReducer";
+import { registerUserSendMailReducer, registerUserVerifyOTPReducer, registerUserReducer } from "./userReducer";
 
 const rootReducer = combineReducers({
     registerUserSendMailReducer: registerUserSendMailReducer,
-    registerUserReducer: registerUserReducer
+    registerUserVerifyOTPReducer: registerUserVerifyOTPReducer
 });
 
 export default rootReducer;
