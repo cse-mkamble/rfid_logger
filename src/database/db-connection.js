@@ -5,6 +5,7 @@ class databaseConnection {
     constructor() {
         this.db = mysql.createPool({
             host: process.env.DATABASEHOST,
+            port: process.env.DATABASEPORT,
             user: process.env.DATABASEUSER,
             password: process.env.DATABASEPASSWORD,
             database: process.env.DATABASENAME
