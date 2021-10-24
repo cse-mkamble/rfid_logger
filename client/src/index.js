@@ -6,14 +6,13 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import store from "./redux/store";
 
 import AlertsView from "./components/AlertsView";
-// import error404 from "./screens/404";
 import Home from "./screens/Home";
 import Login from "./screens/Authentication/Login";
 import Register from "./screens/Authentication/Register";
 import Test from "./screens/Test";
 import './index.css';
 
-class Main extends React.Component {
+class MainRoute extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -23,9 +22,11 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
+
     // document.addEventListener('contextmenu', (e) => {
     //   e.preventDefault();
     // });
+
   };
 
   handleAddErrorMessages = errors => {
@@ -100,15 +101,15 @@ class Main extends React.Component {
           </div>
         </div>
       </div>
-    )
-  }
-}
+    );
+  };
+};
 
 window.store = store;
 
 ReactDOM.render(
   <Provider store={store}>
-    <Main />
+    <MainRoute />
   </Provider>,
   document.getElementById('main')
 );

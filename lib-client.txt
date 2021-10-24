@@ -1,0 +1,26 @@
+
+# client create command --> npx create-react-app client
+
+# client install dependencies
+
+cd client
+
+npm install typescript
+
+npm install --save axios
+npm install --save react-dom
+npm install --save react-redux
+npm install --save react-router-dom
+npm install --save redux-devtools-extension
+npm install --save redux-thunk
+npm install --save aos 
+npm install --save material-ui-phone-number
+npm install --save react-bs-notifier
+
+npm install "@mui/material" "@emotion/react" "@emotion/styled"
+npm install "@mui/material" "@mui/styled-engine-sc" styled-components
+npm install "@mui/icons-material"
+
+npm install --save react-helmet
+
+cd ..
